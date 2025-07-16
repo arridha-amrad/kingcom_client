@@ -6,11 +6,11 @@ import {
   useSpring,
   useTransform,
   motionValue,
+  SpringOptions,
 } from "motion/react";
 import useMeasure from "react-use-measure";
 
-const TRANSITION = {
-  type: "spring",
+const springOptions: SpringOptions = {
   stiffness: 280,
   damping: 18,
   mass: 0.3,
@@ -19,7 +19,7 @@ const TRANSITION = {
 function Digit({ value, place }: { value: number; place: number }) {
   const valueRoundedToPlace = Math.floor(value / place) % 10;
   const initial = motionValue(valueRoundedToPlace);
-  const animatedValue = useSpring(initial, TRANSITION);
+  const animatedValue = useSpring(initial, springOptions);
 
   useEffect(() => {
     animatedValue.set(valueRoundedToPlace);
@@ -66,7 +66,7 @@ function Number({ mv, number }: { mv: MotionValue<number>; number: number }) {
       style={{ y }}
       layoutId={`${uniqueId}-${number}`}
       className="absolute inset-0 flex items-center justify-center"
-      transition={TRANSITION}
+      transition={{ type: "spring", ...springOptions }}
       ref={ref}
     >
       {number}

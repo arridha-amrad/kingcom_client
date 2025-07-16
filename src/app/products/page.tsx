@@ -1,9 +1,8 @@
-"use client";
-
 import ProductFilter from "@/ProductFilter";
 import Products from "@/components/Products";
 import ProductPaginatedButton from "@/components/ProductsPaginatedButton";
 import { ChevronRightIcon } from "lucide-react";
+import { Suspense } from "react";
 
 function Page() {
   return (
@@ -25,7 +24,9 @@ function Page() {
         <div className="h-full w-full">
           <Products />
           <div className="xl:max-w-7xl w-full mx-auto my-8 h-px bg-black/10"></div>
-          <ProductPaginatedButton totalPages={7} />
+          <Suspense>
+            <ProductPaginatedButton totalPages={7} />
+          </Suspense>
         </div>
       </div>
     </main>

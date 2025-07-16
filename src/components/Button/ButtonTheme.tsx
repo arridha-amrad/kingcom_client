@@ -6,8 +6,6 @@ export default function ButtonTheme() {
   const [isMounted, setIsMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
-  console.log({ theme });
-
   useEffect(() => {
     setIsMounted(true);
   }, []);
