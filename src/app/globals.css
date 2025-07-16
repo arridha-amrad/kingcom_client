@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f1f1f1;
+  --foreground: #171717;
+}
+
+[data-theme='dark']{
+  --background: #171717;
+  --foreground: #f1f1f1;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-satoshi);
+  --font-header: var(--font-integral);
+}
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-satoshi);
+}
