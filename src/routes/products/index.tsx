@@ -1,10 +1,11 @@
 import ProductFilter from '@/components/ProductFilter';
 import Products from '@/components/Products';
 import ProductPaginatedButton from '@/components/ProductsPaginatedButton';
-import { cacheKey } from '@/constants/cacheKey';
-import { fetchProducts } from '@/hooks/product/useGetProducts';
-import { createFileRoute, useLoaderData } from '@tanstack/react-router';
-import { ChevronRightIcon } from 'lucide-react';
+import { productsQueryOptions } from '@/queryOptions/product.queryOptions';
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { createFileRoute } from '@tanstack/react-router';
+import { ChevronRightIcon, Loader2 } from 'lucide-react';
 
 export const Route = createFileRoute('/products/')({
   component: RouteComponent,
@@ -16,17 +17,20 @@ export const Route = createFileRoute('/products/')({
       page,
     };
   },
-  loader({ context, deps: { limit, name, page } }) {
-    const result = context.queryClient.ensureQueryData({
-      queryKey: [cacheKey.product.getProducts],
-      queryFn: () => fetchProducts({ limit, name, page }),
-    });
-    return result;
+  loader({ context: { queryClient }, deps }) {
+    queryClient.ensureQueryData(productsQueryOptions(deps));
   },
+  pendingComponent: () => (
+    <div className="flex justify-center w-full">
+      <Loader2 className="animate-spin size-7" />
+    </div>
+  ),
 });
 
 function RouteComponent() {
-  const result = Route.useLoaderData();
+  const deps = Route.useLoaderDeps();
+  const { data } = useSuspenseQuery(productsQueryOptions(deps));
+
   return (
     <main className="w-full px-4">
       <section
@@ -44,9 +48,9 @@ function RouteComponent() {
           <ProductFilter />
         </div>
         <div className="h-full w-full">
-          <Products />
+          <Products products={data.items} />
           <div className="xl:max-w-7xl w-full mx-auto my-8 h-px bg-black/10"></div>
-          {result && <ProductPaginatedButton totalPages={result.totalPage} />}
+          <ProductPaginatedButton totalPages={data.totalPage} />
         </div>
       </div>
     </main>

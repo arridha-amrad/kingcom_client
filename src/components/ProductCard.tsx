@@ -1,17 +1,17 @@
 'use client';
 
-import { useNavigate } from '@tanstack/react-router';
-import Rating from './Rating';
-import type { Product as TProduct } from '@/types/api/product';
-import { Flame } from 'lucide-react';
+import type { Product } from '@/models/product.model';
 import { formatToIdr } from '@/utils';
+import { useNavigate } from '@tanstack/react-router';
+import { Flame } from 'lucide-react';
+import Rating from './Rating';
 
 type Props = {
-  product: TProduct;
+  product: Product;
 };
 
-function Product({
-  product: { discount, images, name, price, average_rating, slug },
+function ProductCard({
+  product: { discount, images, name, price, rating, slug },
 }: Props) {
   const router = useNavigate();
   const imageUrl = images[0].url;
@@ -35,8 +35,8 @@ function Product({
       <h1 title={name} className="font-bold xl:text-[20px] line-clamp-2">
         {name}
       </h1>
-      {average_rating ? (
-        <Rating value={average_rating} />
+      {rating ? (
+        <Rating value={rating} />
       ) : (
         <div className="text-sm flex bg-yellow-500/20 items-end justify-end gap-1 w-fit py-1 px-2 rounded-full text-foreground font-medium">
           <Flame className="size-5 stroke-yellow-600 fill-yellow-400" />
@@ -58,4 +58,4 @@ function Product({
   );
 }
 
-export default Product;
+export default ProductCard;

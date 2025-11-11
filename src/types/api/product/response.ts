@@ -1,13 +1,5 @@
-import type { PaginatedResponse } from '../paginated';
-
 export interface CreteProductResponse {
   message: string;
-}
-
-export type GetProductsResponse = PaginatedResponse<Product>;
-
-export interface GetProductDetailResponse {
-  product: Product;
 }
 
 export interface Product {
@@ -24,9 +16,9 @@ export interface Product {
   video_url: string;
   images: ProductImage[];
   weight: number;
-  // coming soon
-  average_rating?: number | null;
   discount: number;
+  // coming soon
+  rating?: number | null;
 }
 
 export interface ProductImage {

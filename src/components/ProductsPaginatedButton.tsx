@@ -1,5 +1,5 @@
 import { useLoaderDeps, useNavigate } from '@tanstack/react-router';
-import { Route } from 'lucide-react';
+import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 
 interface Props {
   totalPages: number;
@@ -7,19 +7,19 @@ interface Props {
 
 function ProductPaginatedButton({ totalPages }: Props) {
   const deps = useLoaderDeps({ from: '/products/' });
-  console.log({ deps });
 
   const router = useNavigate();
 
-  // const currentPage = Number(sp.get('page') ?? '1') ?? 1
   const currentPage = deps.page ?? 1;
 
   const handlePageChange = (newPage: number) => {
-    // const params = new URLSearchParams(sp.toString())
-    const params = '2';
-    // params.set('page', newPage.toString())
-
-    router({ to: `/products?${params.toString()}` });
+    router({
+      to: '/products',
+      search: (prev) => ({
+        ...prev,
+        page: newPage,
+      }),
+    });
   };
 
   const renderPageNumbers = () => {
@@ -39,63 +39,41 @@ function ProductPaginatedButton({ totalPages }: Props) {
     handlePageChange(currentPage - 1);
   };
 
+  const buttons = (
+    <div className="flex items-center justify-center gap-1">
+      {renderPageNumbers().map((page) => (
+        <button
+          onClick={() => handlePageChange(page)}
+          key={page}
+          className={`size-10 rounded-xl cursor-pointer ${
+            currentPage === page
+              ? 'bg-foreground text-background'
+              : 'bg-background text-foreground '
+          }`}
+          disabled={typeof page !== 'number'}
+        >
+          {page}
+        </button>
+      ))}
+    </div>
+  );
+
   return (
     <div className="flex items-center justify-between">
       <button
         onClick={prevPage}
         className="flex items-center justify-center gap-2 border border-foreground/20 rounded-xl h-10 aspect-square md:aspect-auto md:px-6"
       >
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 14 14"
-          className="fill-foreground stroke-foreground"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12.8332 6.99996H1.1665M1.1665 6.99996L6.99984 12.8333M1.1665 6.99996L6.99984 1.16663"
-            strokeWidth="1.67"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <ArrowLeftIcon />
         <span className="lg:block hidden">Previous</span>
       </button>
-      <div className="flex items-center justify-center gap-1">
-        {renderPageNumbers().map((page) => (
-          <button
-            onClick={() => handlePageChange(page)}
-            key={page}
-            className={`size-10 rounded-xl cursor-pointer ${
-              currentPage === page
-                ? 'bg-foreground text-background'
-                : 'bg-background text-foreground '
-            }`}
-            disabled={typeof page !== 'number'}
-          >
-            {page}
-          </button>
-        ))}
-      </div>
+      {buttons}
       <button
         onClick={nextPage}
         className="flex items-center justify-center gap-2 border border-foreground/20 rounded-xl h-10 aspect-square md:aspect-auto md:px-6"
       >
         <span className="lg:block hidden">Next</span>
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 14 14"
-          className="stroke-foreground"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1.1665 6.99996H12.8332M12.8332 6.99996L6.99984 1.16663M12.8332 6.99996L6.99984 12.8333"
-            strokeWidth="1.67"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <ArrowRightIcon />
       </button>
     </div>
   );

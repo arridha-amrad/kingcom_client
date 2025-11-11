@@ -2,17 +2,22 @@ import ProductDetail from '@/components/ProductDetail';
 import Tab from '@/components/ProductDetail/Tab';
 import YouMightAlsoLike from '@/components/ShowCases/YouMightAlsoLike';
 import Spinner from '@/components/Spinner';
-import useGetProductDetail from '@/hooks/product/useGetProductDetail';
+import { productQueryOptions } from '@/queryOptions/product.queryOptions';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { ChevronRight } from 'lucide-react';
 
 export const Route = createFileRoute('/products/$slug')({
   component: RouteComponent,
+  loader: ({ context: { queryClient }, params: { slug } }) => {
+    queryClient.ensureQueryData(productQueryOptions(slug));
+  },
 });
 
 function RouteComponent() {
   const { slug } = Route.useParams();
-  const { data, isPending } = useGetProductDetail(slug);
+  const { data, isPending } = useSuspenseQuery(productQueryOptions(slug));
+
   if (isPending) {
     return (
       <div className="flex items-center justify-center mt-4">
@@ -22,9 +27,13 @@ function RouteComponent() {
       </div>
     );
   }
+
   if (!data) {
     return <p>Product not found</p>;
   }
+
+  console.log(slug);
+
   return (
     <main className="px-4">
       <section
@@ -37,9 +46,9 @@ function RouteComponent() {
         <ChevronRight />
         <p>MotherBoard</p>
         <ChevronRight />
-        <p className="text-foreground">{data.name}</p>
+        <p className="text-foreground">{data.product.name}</p>
       </section>
-      <ProductDetail />
+      <ProductDetail product={data.product} />
       <Tab />
       <YouMightAlsoLike />
       <div className="xl:mb-32 mb-16"></div>

@@ -1,16 +1,13 @@
 import { ChevronDown } from 'lucide-react';
-
 import ModalFilter from './ModalFilter';
-import useGetProducts from '@/hooks/product/useGetProducts';
-import Spinner from './Spinner';
-import ProductCard from './Product';
-import { useLoaderData } from '@tanstack/react-router';
+import ProductCard from './ProductCard';
+import type { Product } from '@/models/product.model';
 
-function Products() {
-  const data = useLoaderData({
-    from: '/products/',
-  });
+type Props = {
+  products: Product[];
+};
 
+function Products({ products }: Props) {
   return (
     <section id="products" className="flex-1 space-y-4">
       <div className="md:flex flex-wrap items-center justify-between">
@@ -29,8 +26,9 @@ function Products() {
         </div>
       </div>
       <div className="grid xl:grid-cols-3 grid-cols-2 gap-y-8 gap-x-4 w-full">
-        {data &&
-          data.items.map((pr, i) => <ProductCard product={pr} key={i} />)}
+        {products.map((pr, i) => (
+          <ProductCard product={pr} key={i} />
+        ))}
       </div>
     </section>
   );
