@@ -1,11 +1,8 @@
 import ProductFilter from '@/components/ProductFilter';
-import Products from '@/components/Products';
-import ProductPaginatedButton from '@/components/ProductsPaginatedButton';
-import { productsQueryOptions } from '@/queryOptions/product.queryOptions';
-import { useSuspenseQuery } from '@tanstack/react-query';
-
+import ProductsWrapper from '@/components/ProductsWrapper';
 import { createFileRoute } from '@tanstack/react-router';
 import { ChevronRightIcon, Loader2 } from 'lucide-react';
+import { Suspense } from 'react';
 
 export const Route = createFileRoute('/products/')({
   component: RouteComponent,
@@ -17,19 +14,18 @@ export const Route = createFileRoute('/products/')({
       page,
     };
   },
-  loader({ context: { queryClient }, deps }) {
-    queryClient.ensureQueryData(productsQueryOptions(deps));
-  },
-  pendingComponent: () => (
+});
+
+function Spinner() {
+  return (
     <div className="flex justify-center w-full">
       <Loader2 className="animate-spin size-7" />
     </div>
-  ),
-});
+  );
+}
 
 function RouteComponent() {
   const deps = Route.useLoaderDeps();
-  const { data } = useSuspenseQuery(productsQueryOptions(deps));
 
   return (
     <main className="w-full px-4">
@@ -47,11 +43,9 @@ function RouteComponent() {
         <div className="max-w-xs md:block hidden">
           <ProductFilter />
         </div>
-        <div className="h-full w-full">
-          <Products products={data.items} />
-          <div className="xl:max-w-7xl w-full mx-auto my-8 h-px bg-black/10"></div>
-          <ProductPaginatedButton totalPages={data.totalPage} />
-        </div>
+        <Suspense fallback={<Spinner />}>
+          <ProductsWrapper deps={deps} />
+        </Suspense>
       </div>
     </main>
   );

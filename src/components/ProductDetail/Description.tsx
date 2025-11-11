@@ -5,6 +5,7 @@ import { SlidingNumber } from '../motion-primitives/slide-number';
 import Rating from '../Rating';
 import AddToCart from './AddToCartBtn';
 import type { Product } from '@/models/product.model';
+import { formatToIdr } from '@/utils';
 
 type Props = {
   product: Product;
@@ -38,10 +39,12 @@ export default function ProductDetailDescription({
       <div className="flex items-center gap-4">
         {discount && (
           <h1 className="font-bold text-3xl">
-            ${price - (price * discount) / 100}
+            {formatToIdr(price - (price * discount) / 100)}
           </h1>
         )}
-        <h1 className="font-bold text-3xl text-foreground/50">${price}</h1>
+        <h1 className="font-bold text-3xl text-foreground/50">
+          {formatToIdr(price)}
+        </h1>
         <div className="w-[72px] h-[34px] rounded-full bg-[#ff3333]/10 flex items-center justify-center font-medium text-red-500">
           -{discount}%
         </div>

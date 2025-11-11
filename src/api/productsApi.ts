@@ -12,6 +12,8 @@ export const fetchProducts = async (params: FetchProductsParams) => {
   const page = params.page ?? '';
   const url = `/products?name=${name}&limit=${limit}&page=${page}`;
 
+  // await new Promise((res) => setTimeout(res, 5000));
+
   try {
     const res = await publicAxios.get<GetProductsResponse>(url);
     const data = res.data;
@@ -26,6 +28,8 @@ export const fetchProducts = async (params: FetchProductsParams) => {
 };
 
 export const fetchProductBySlug = async (slug: string) => {
+  // await new Promise((res) => setTimeout(res, 5000));
+
   try {
     const res = await publicAxios.get<GetProductResponse>(`/products/${slug}`);
     const data = res.data;
