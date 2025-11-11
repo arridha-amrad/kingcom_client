@@ -1,10 +1,10 @@
+import type { PaginatedResponse } from '../paginated';
+
 export interface CreteProductResponse {
   message: string;
 }
 
-export interface GetProductsResponse {
-  products: Product[];
-}
+export type GetProductsResponse = PaginatedResponse<Product>;
 
 export interface GetProductDetailResponse {
   product: Product;

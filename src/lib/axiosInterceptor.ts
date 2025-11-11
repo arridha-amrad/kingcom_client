@@ -1,13 +1,15 @@
 import axios from 'axios';
 
 let accToken: string | null = null;
+
 export const setAccessToken = (newToken: string) =>
   (accToken = `Bearer ${newToken}`);
+
 export const getAccessToken = () => accToken;
 
 const baseApiUrl = import.meta.env.VITE_BASE_SERVER_URL;
-const apiVersion = import.meta.env.VITE_API_VERSION;
-const baseURL = `${baseApiUrl}/api/${apiVersion}`;
+
+const baseURL = `${baseApiUrl}/api`;
 
 export const publicAxios = axios.create({
   baseURL,
@@ -18,6 +20,7 @@ export const privateAxios = axios.create({
   baseURL,
   withCredentials: true,
 });
+
 privateAxios.interceptors.request.use(
   (config) => {
     config.headers['Authorization'] = accToken;
@@ -27,6 +30,7 @@ privateAxios.interceptors.request.use(
     return Promise.reject(error);
   },
 );
+
 privateAxios.interceptors.response.use(
   (response) => {
     return response;
