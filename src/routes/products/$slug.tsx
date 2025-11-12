@@ -17,10 +17,6 @@ function RouteComponent() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(productQueryOptions(slug));
 
-  if (!data) {
-    return <p>Product not found</p>;
-  }
-
   return (
     <main className="px-4">
       <section

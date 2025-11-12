@@ -7,6 +7,7 @@ interface Props {
 
 export default function AddToCart({ productId, quantity }: Props) {
   const { mutate, isPending } = useAddToCartMutation();
+
   return (
     <button
       disabled={isPending}

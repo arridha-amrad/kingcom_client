@@ -1,4 +1,4 @@
-import { addToCart, fetchCart } from '@/api/cartsApi';
+import { addToCart, fetchCart } from '@/api/cart.api';
 import { cacheKey } from '@/constants/cacheKey';
 import { queryClient } from '@/main';
 import { queryOptions, useMutation } from '@tanstack/react-query';
@@ -7,13 +7,12 @@ import toast from 'react-hot-toast';
 
 export const cartQueryOptions = queryOptions({
   queryKey: [cacheKey.cart.getCarts],
-  queryFn: fetchCart,
+  queryFn: () => fetchCart(),
   staleTime: 1000 * 60,
 });
 
 export const useAddToCartMutation = () => {
   const router = useRouter();
-
   return useMutation({
     mutationFn: ({
       productId,

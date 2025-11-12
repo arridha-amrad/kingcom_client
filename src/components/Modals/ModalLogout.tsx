@@ -1,4 +1,4 @@
-import { useLogout } from '@/hooks/auth/useLogout';
+import { useLogoutMutation } from '@/queryOptions/auth.queryOptions';
 import {
   Description,
   Dialog,
@@ -9,9 +9,7 @@ import {
 import { X } from 'lucide-react';
 import { type Dispatch, type SetStateAction } from 'react';
 import Spinner from '../Spinner';
-import { AxiosError } from 'axios';
-import toast from 'react-hot-toast';
-import { useRouter } from '@tanstack/react-router';
+import { useLocation, useRouter } from '@tanstack/react-router';
 
 interface Props {
   isOpen: boolean;
@@ -19,20 +17,18 @@ interface Props {
 }
 
 export default function ModalLogout({ isOpen, setIsOpen }: Props) {
-  const { mutateAsync, isPending } = useLogout();
+  const { mutateAsync, isPending } = useLogoutMutation();
   const router = useRouter();
+  const location = useLocation();
+
   const logout = async () => {
-    try {
-      await mutateAsync();
-      toast.success('You have logged out');
-      router.invalidate();
-    } catch (err) {
-      console.log(err);
-      if (err instanceof AxiosError) {
-        toast.error(err.message);
-      }
-    }
+    await mutateAsync();
+    setIsOpen(false);
+    router.navigate({
+      to: location.pathname,
+    });
   };
+
   return (
     <>
       <Dialog open={isOpen} onClose={() => {}} className="relative z-50">

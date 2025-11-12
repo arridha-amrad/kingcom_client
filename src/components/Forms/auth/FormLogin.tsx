@@ -1,7 +1,8 @@
 import { useLogin } from '@/hooks/auth/useLogin';
 import { useAppForm } from '@/hooks/useAppForm';
 import { setAccessToken } from '@/lib/axiosInterceptor';
-import { loginSchema } from '@/schemas/auth';
+import { useLoginMutation } from '@/queryOptions/auth.queryOptions';
+import { loginSchema } from '@/schemas/auth.schema';
 import { Description, DialogTitle } from '@headlessui/react';
 import { Link, useRouter, useRouterState } from '@tanstack/react-router';
 import { type Dispatch, type SetStateAction } from 'react';
@@ -13,12 +14,7 @@ interface Props {
 }
 
 export default function FormLogin({ setIsOpen, setIsLogin }: Props) {
-  const { mutateAsync, isPending } = useLogin();
-  const router = useRouter();
-  const search = useRouterState() as {
-    redirect?: string;
-    login?: string;
-  };
+  const { mutateAsync, isPending } = useLoginMutation();
   const form = useAppForm({
     defaultValues: {
       identity: '',
@@ -28,28 +24,11 @@ export default function FormLogin({ setIsOpen, setIsLogin }: Props) {
       onChange: loginSchema,
     },
     async onSubmit({ value: { identity, password } }) {
-      try {
-        const data = await mutateAsync({
-          identity,
-          password,
-        });
-        if (data) {
-          setAccessToken(data.token);
-        }
-        setIsOpen(false);
-        if (search.redirect) {
-          const url = new URL(search.redirect, window.location.origin);
-          router.navigate({
-            to: url.pathname,
-            replace: true,
-          });
-        }
-      } catch (err) {
-        if (err instanceof Error) {
-          console.log('error login : ', err.message);
-          toast.error(err.message);
-        }
-      }
+      await mutateAsync({
+        identity,
+        password,
+      });
+      setIsOpen(false);
     },
   });
   return (

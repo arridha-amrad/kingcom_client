@@ -1,7 +1,7 @@
 import { useVerify } from '@/hooks/auth/useVerify';
 import { useAppForm } from '@/hooks/useAppForm';
 import { setAccessToken } from '@/lib/axiosInterceptor';
-import { emailVerificationSchema } from '@/schemas/auth';
+import { emailVerificationSchema } from '@/schemas/auth.schema';
 import { Description, DialogTitle } from '@headlessui/react';
 import { type Dispatch, type SetStateAction } from 'react';
 import toast from 'react-hot-toast';

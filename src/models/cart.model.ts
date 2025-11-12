@@ -5,5 +5,5 @@ export type Cart = {
   quantity: number;
   createdAt: Date;
   updatedAt: Date;
-  Product: Product;
+  product: Product;
 };

@@ -1,8 +1,8 @@
-import type { FetchProductsParams } from '@/api/types/productsApi.types';
 import { productsQueryOptions } from '@/queryOptions/product.queryOptions';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Products from './Products';
 import ProductPaginatedButton from './ProductsPaginatedButton';
+import type { FetchProductsParams } from '@/api/product.api';
 
 type Props = {
   deps: FetchProductsParams;

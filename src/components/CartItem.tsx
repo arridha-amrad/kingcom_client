@@ -6,19 +6,26 @@ import { decreaseQuantity, increaseQuantity } from '@/hooks/product/useGetCart';
 import { useQueryClient } from '@tanstack/react-query';
 import { formatToIdr } from '@/utils';
 import type { Cart } from '@/models/cart.model';
+import type { ReactNode } from 'react';
 
 interface Props {
   item: Cart;
 }
 
-function CartItem({
-  item: {
-    Product: { discount, images, price, name, weight },
+const CartContainer = ({ children }: { children: ReactNode }) => {
+  return <article className="flex gap-4 h-max">{children}</article>;
+};
+
+function CartItem({ item }: Props) {
+  const qc = useQueryClient();
+
+  console.log(item);
+
+  const {
+    product: { discount, images, price, name, weight },
     quantity,
     id,
-  },
-}: Props) {
-  const qc = useQueryClient();
+  } = item;
 
   const onDecrease = () => {
     if (quantity === 1) return;
@@ -30,7 +37,7 @@ function CartItem({
   };
 
   return (
-    <article className="flex gap-4 h-max">
+    <CartContainer>
       <div className="lg:size-[124px] size-[90px] shrink-0 rounded-3xl overflow-hidden">
         <img
           width={250}
@@ -77,7 +84,7 @@ function CartItem({
           />
         </div>
       </div>
-    </article>
+    </CartContainer>
   );
 }
 

@@ -1,26 +1,10 @@
-import Carts from '@/components/Cart';
 import CartWrapper from '@/components/CartWrapper';
-import OrderSummary from '@/components/OrderSummary';
-import OrderProvider from '@/components/Providers/OrderProvider';
-import { getCart } from '@/hooks/product/useGetCart';
-import { getProvinces } from '@/hooks/useShipping';
 import { createFileRoute } from '@tanstack/react-router';
 import { ChevronRight, Loader2 } from 'lucide-react';
 import { Suspense } from 'react';
 
 export const Route = createFileRoute('/_auth/cart')({
   component: RouteComponent,
-  loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData({
-      queryKey: ['shipping-province'],
-      queryFn: getProvinces,
-    });
-    const carts = await context.queryClient.ensureQueryData({
-      queryKey: ['get-cart'],
-      queryFn: getCart,
-    });
-    return carts;
-  },
 });
 
 function Spinner() {
@@ -32,8 +16,6 @@ function Spinner() {
 }
 
 function RouteComponent() {
-  const carts = Route.useLoaderData();
-
   return (
     <main className="w-full mx-auto px-4">
       <section
@@ -45,13 +27,13 @@ function RouteComponent() {
         <p className="text-foreground">Cart</p>
       </section>
       <section className="w-full">
-        {!carts ? (
+        {/* {!carts ? (
           <div className="text-2xl font-extrabold py-4">Your cart is empty</div>
-        ) : (
-          <Suspense fallback={<Spinner />}>
-            <CartWrapper />
-          </Suspense>
-        )}
+        ) : ( */}
+        <Suspense fallback={<Spinner />}>
+          <CartWrapper />
+        </Suspense>
+        {/* )} */}
       </section>
       <div className="xl:mb-48 mb-16"></div>
     </main>

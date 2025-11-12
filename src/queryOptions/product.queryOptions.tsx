@@ -1,5 +1,8 @@
-import { fetchProductBySlug, fetchProducts } from '@/api/productsApi';
-import type { FetchProductsParams } from '@/api/types/productsApi.types';
+import {
+  fetchProductBySlug,
+  fetchProducts,
+  type FetchProductsParams,
+} from '@/api/product.api';
 import { cacheKey } from '@/constants/cacheKey';
 import { queryOptions } from '@tanstack/react-query';
 

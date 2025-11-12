@@ -1,9 +1,9 @@
-import { getAuthQueryOptions } from '@/hooks/auth/useGetAuth';
+import { meQueryOptions } from '@/queryOptions/auth.queryOptions';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_auth')({
   beforeLoad: async ({ context }) => {
-    const user = await context.queryClient.ensureQueryData(getAuthQueryOptions);
+    const user = await context.queryClient.ensureQueryData(meQueryOptions);
     if (!user) {
       throw redirect({
         to: '/',
