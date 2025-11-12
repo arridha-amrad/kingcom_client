@@ -6,6 +6,7 @@ import Reviews from './Reviews';
 import Specifications from './Specifications';
 import Description from './Descriptions';
 import Video from './Video';
+import type { Product } from '@/models/product.model';
 
 const tabs = [
   'Descriptions',
@@ -15,7 +16,13 @@ const tabs = [
   'FAQs',
 ];
 
-function MyTab() {
+type Props = {
+  product: Product;
+};
+
+function ProductDetailTabs({
+  product: { name, description, videoUrl, specification },
+}: Props) {
   return (
     <TabGroup className="w-full mx-auto">
       <TabList className="flex w-full h-12 gap-4 sm:gap-0 items-center border-b border-foreground/20">
@@ -42,13 +49,13 @@ function MyTab() {
       </TabList>
       <TabPanels>
         <TabPanel>
-          <Description />
+          <Description name={name} description={description} />
         </TabPanel>
         <TabPanel>
-          <Specifications />
+          <Specifications name={name} specs={specification ?? ''} />
         </TabPanel>
         <TabPanel>
-          <Video />
+          <Video name={name} videoUrl={videoUrl} />
         </TabPanel>
         <TabPanel>
           <Reviews />
@@ -61,4 +68,4 @@ function MyTab() {
   );
 }
 
-export default MyTab;
+export default ProductDetailTabs;

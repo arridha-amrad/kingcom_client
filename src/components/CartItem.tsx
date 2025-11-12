@@ -2,13 +2,10 @@
 
 import { Trash } from 'lucide-react';
 import ButtonQuantity from './Button/ButtonQuantity';
-import {
-  decreaseQuantity,
-  increaseQuantity,
-  type Cart,
-} from '@/hooks/product/useGetCart';
+import { decreaseQuantity, increaseQuantity } from '@/hooks/product/useGetCart';
 import { useQueryClient } from '@tanstack/react-query';
 import { formatToIdr } from '@/utils';
+import type { Cart } from '@/models/cart.model';
 
 interface Props {
   item: Cart;
@@ -16,7 +13,7 @@ interface Props {
 
 function CartItem({
   item: {
-    Product: { discount, image, price, name, weight },
+    Product: { discount, images, price, name, weight },
     quantity,
     id,
   },
@@ -38,7 +35,7 @@ function CartItem({
         <img
           width={250}
           height={250}
-          src={image}
+          src={images[0].url}
           alt="cart image"
           className="w-full h-full object-cover"
         />

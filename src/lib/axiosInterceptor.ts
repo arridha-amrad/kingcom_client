@@ -37,19 +37,26 @@ privateAxios.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+
+    if (error.config.url.includes('/auth/refresh-token')) {
+      return Promise.reject(error);
+    }
+
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true; // Prevent infinite loop
-      // Attempt to refresh the token
+
       try {
-        const res = await privateAxios.post('/auth/refresh-token');
+        const res = await publicAxios.post('/auth/refresh-token');
         const newToken = res.data.token;
         setAccessToken(newToken);
         originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
         return privateAxios(originalRequest);
       } catch (refreshError) {
+        console.log('refresh error');
         return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   },
 );

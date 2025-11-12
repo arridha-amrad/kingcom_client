@@ -1,11 +1,10 @@
-import ColorOptions from '@/components/ColorOptions';
+import type { Product } from '@/models/product.model';
+import { formatToIdr } from '@/utils';
 import { Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { SlidingNumber } from '../motion-primitives/slide-number';
 import Rating from '../Rating';
 import AddToCart from './AddToCartBtn';
-import type { Product } from '@/models/product.model';
-import { formatToIdr } from '@/utils';
 
 type Props = {
   product: Product;
@@ -50,9 +49,6 @@ export default function ProductDetailDescription({
         </div>
       </div>
       <p className="font-light">{description}</p>
-      <div className="w-full h-px bg-foreground/10" />
-      <h1 className="font-light">Select Colors</h1>
-      <ColorOptions />
       <div className="w-full h-px bg-foreground/10" />
       <div className="flex items-center gap-4">
         <div className="flex-1 flex h-13 bg-foreground text-background  rounded-full">

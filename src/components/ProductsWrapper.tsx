@@ -15,7 +15,9 @@ export default function ProductsWrapper({ deps }: Props) {
     <div className="h-full w-full">
       <Products products={data.items} />
       <div className="xl:max-w-7xl w-full mx-auto my-8 h-px bg-black/10"></div>
-      <ProductPaginatedButton totalPages={data.totalPage} />
+      {data.totalPage > 1 && (
+        <ProductPaginatedButton totalPages={data.totalPage} />
+      )}
     </div>
   );
 }

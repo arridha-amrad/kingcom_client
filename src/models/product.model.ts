@@ -11,7 +11,7 @@ export type Product = {
   weight: number;
   discount: number;
   rating: number | null;
-  video_url: string | null;
+  videoUrl: string | null;
   specification: string | null;
 };
 

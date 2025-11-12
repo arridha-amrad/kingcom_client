@@ -1,5 +1,4 @@
-import useAddToCart from '@/hooks/product/useAddtoCart';
-import toast from 'react-hot-toast';
+import { useAddToCartMutation } from '@/queryOptions/cart.queryOptions';
 
 interface Props {
   productId: string;
@@ -7,27 +6,11 @@ interface Props {
 }
 
 export default function AddToCart({ productId, quantity }: Props) {
-  const { mutateAsync, isPending } = useAddToCart();
-
-  const addToCart = async () => {
-    const id = toast.loading('Adding to cart...');
-    try {
-      await mutateAsync({
-        productId,
-        quantity,
-      });
-      toast.success('Added to cart', { id });
-    } catch (err) {
-      console.log(err);
-      if (err instanceof Error) {
-        toast.error(err.message, { id });
-      }
-    }
-  };
+  const { mutate, isPending } = useAddToCartMutation();
   return (
     <button
       disabled={isPending}
-      onClick={addToCart}
+      onClick={() => mutate({ productId, quantity })}
       className="flex-2 disabled:brightness-75 font-semibold h-13 bg-foreground text-background rounded-full"
     >
       Add To Cart
