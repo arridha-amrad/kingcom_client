@@ -1,7 +1,10 @@
 import { addToCart, fetchCart } from '@/api/cart.api';
 import { cacheKey } from '@/constants/cacheKey';
-import { queryClient } from '@/main';
-import { queryOptions, useMutation } from '@tanstack/react-query';
+import {
+  queryOptions,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
 
@@ -12,6 +15,7 @@ export const cartQueryOptions = queryOptions({
 });
 
 export const useAddToCartMutation = () => {
+  const qc = useQueryClient();
   const router = useRouter();
   return useMutation({
     mutationFn: ({
@@ -22,7 +26,7 @@ export const useAddToCartMutation = () => {
       quantity: number;
     }) => addToCart(productId, quantity),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [cacheKey.cart.getCarts] });
+      qc.invalidateQueries({ queryKey: [cacheKey.cart.getCarts] });
       toast.success('Added to cart');
     },
     onError(error) {

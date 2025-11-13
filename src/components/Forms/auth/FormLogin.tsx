@@ -41,8 +41,6 @@ export default function FormLogin({ setIsOpen, setIsLogin }: Props) {
         }}
         className="space-y-4"
       >
-        <DialogTitle className="font-bold text-4xl">Login</DialogTitle>
-        <Description>Login into your account</Description>
         <div className="w-full space-y-4 py-8">
           <form.AppField name="identity">
             {(field) => (

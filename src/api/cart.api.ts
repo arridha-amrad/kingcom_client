@@ -25,6 +25,7 @@ export const addToCart = async (productId: string, quantity: number) => {
 };
 
 export const fetchCart = async () => {
+  // await new Promise((res) => setTimeout(res, 5000));
   try {
     const res = await privateAxios.get<{ carts: Cart[] }>(routes.fetchCart);
     return res.data;

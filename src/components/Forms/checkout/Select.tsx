@@ -1,10 +1,11 @@
+import type { ShippingResponse } from '@/api/shipping.api';
 import type { IdWithName } from '@/hooks/useShipping';
 import { Field, Label, Select } from '@headlessui/react';
 import clsx from 'clsx';
 import { ChevronDownIcon } from 'lucide-react';
 
 interface Props {
-  options?: IdWithName[];
+  options: ShippingResponse[];
   label: string;
   setData: React.Dispatch<React.SetStateAction<IdWithName | null>>;
 }
@@ -19,6 +20,9 @@ export default function CheckoutSelect({ label, options, setData }: Props) {
       name,
     });
   };
+
+  console.log({ options });
+
   return (
     <div className="w-full">
       <Field>
@@ -35,7 +39,11 @@ export default function CheckoutSelect({ label, options, setData }: Props) {
           >
             <option value={undefined}>-- Select {label}</option>
             {options?.map((o, i) => (
-              <option key={i} value={`${o.id}_${o.name}`}>
+              <option
+                className="text-white"
+                key={i}
+                value={`${o.id}_${o.name}`}
+              >
                 {o.name}
               </option>
             ))}

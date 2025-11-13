@@ -9,4 +9,10 @@ export const cacheKey = {
   cart: {
     getCarts: 'get-carts',
   },
+  shipping: {
+    provinces: 'provinces',
+    cities: 'cities',
+    districts: 'districts',
+    order: 'shipping-order',
+  },
 };

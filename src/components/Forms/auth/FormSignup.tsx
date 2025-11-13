@@ -1,7 +1,6 @@
 import { useSignup } from '@/hooks/auth/useSignup';
 import { useAppForm } from '@/hooks/useAppForm';
 import { signupSchema } from '@/schemas/auth.schema';
-import { Description, DialogTitle } from '@headlessui/react';
 import { type Dispatch, type SetStateAction } from 'react';
 import toast from 'react-hot-toast';
 
@@ -59,8 +58,6 @@ export default function FormSignup({
         }}
         className="space-y-4"
       >
-        <DialogTitle className="font-bold text-4xl">Sign Up</DialogTitle>
-        <Description>Create a new account</Description>
         <div className="w-full space-y-4 py-8">
           <form.AppField name="name">
             {(field) => <field.AuthTextField type="text" placeholder="Name" />}
