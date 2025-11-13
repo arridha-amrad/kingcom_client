@@ -5,12 +5,18 @@ import clsx from 'clsx';
 import { ChevronDownIcon } from 'lucide-react';
 
 interface Props {
+  isPending: boolean;
   options: ShippingResponse[];
   label: string;
   setData: React.Dispatch<React.SetStateAction<IdWithName | null>>;
 }
 
-export default function CheckoutSelect({ label, options, setData }: Props) {
+export default function CheckoutSelect({
+  label,
+  options,
+  setData,
+  isPending,
+}: Props) {
   const handleChange = (value: string) => {
     const data = value.split('_');
     const id = data[0];
@@ -21,11 +27,9 @@ export default function CheckoutSelect({ label, options, setData }: Props) {
     });
   };
 
-  console.log({ options });
-
   return (
     <div className="w-full">
-      <Field>
+      <Field disabled={isPending}>
         <Label className="text-sm/6 font-medium text-foreground">{label}</Label>
         <div className="relative">
           <Select

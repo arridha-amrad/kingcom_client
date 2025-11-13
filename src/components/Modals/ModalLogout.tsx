@@ -9,11 +9,7 @@ interface Props {
 
 export default function ModalLogout({ isOpen, setIsOpen }: Props) {
   return (
-    <Modal
-      isOpen={isOpen}
-      disableBackgroundClose
-      onClose={() => setIsOpen(false)}
-    >
+    <Modal isOpen={isOpen} disableBackgroundClose onClose={() => setIsOpen(false)}>
       <div className="max-w-sm w-full">
         <Modal.Title title="Logout" />
         <Modal.Description description="This action will clear out your session. Are you sure to continue?" />

@@ -34,6 +34,9 @@ export const useCostMutation = () => {
   return useMutation({
     mutationFn: (params: CalculateShippingCostParams) =>
       calculateShippingCost(params),
+    onSuccess({ costs }) {
+      console.log(costs);
+    },
     onError: (err) => {
       if (err instanceof AxiosError) {
         toast.error(err.response?.data.message);

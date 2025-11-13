@@ -1,14 +1,10 @@
+import { cacheKey } from '@/constants/cacheKey';
 import type { Cart } from '@/models/cart.model';
 import type { Shipping } from '@/models/order.model';
 import { formatToIdr } from '@/utils';
+import { useQuery } from '@tanstack/react-query';
 import { ArrowRightIcon, Tag, Truck } from 'lucide-react';
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 const calcCartSubtotal = (carts: Cart[]) => {
   const subTotal = carts.reduce((pv, cv) => {
@@ -24,7 +20,7 @@ const calcCartSubtotal = (carts: Cart[]) => {
 
 const CartSummaryCardContext = createContext<{
   carts: Cart[];
-  courier: Shipping | null;
+  courier?: Shipping | null;
 }>({ carts: [], courier: null });
 
 const useCartSummaryContext = () => {
@@ -35,14 +31,9 @@ const useCartSummaryContext = () => {
   return context;
 };
 
-const CartSummaryCard = ({
-  carts,
-  children,
-}: {
-  children: ReactNode;
-  carts: Cart[];
-}) => {
-  const [courier, setCourier] = useState<Shipping | null>(null);
+const CartSummaryCard = ({ carts, children }: { children: ReactNode; carts: Cart[] }) => {
+  const { data } = useQuery({ queryKey: [cacheKey.cart.shipping], queryFn: () => null, enabled: false });
+  const courier = data as Shipping | undefined;
   return (
     <CartSummaryCardContext.Provider value={{ carts, courier }}>
       <article className="h-max w-full lg:max-w-md shrink-0 border space-y-6 border-foreground/20 p-6 rounded-3xl">
@@ -61,9 +52,7 @@ CartSummaryCard.SubTotal = () => {
   return (
     <div className="flex items-center justify-between">
       <h2 className="text-foreground/60 text-xl">SubTotal</h2>
-      <h2 className="text-xl font-bold">
-        {formatToIdr(calcCartSubtotal(carts) ?? 0)}
-      </h2>
+      <h2 className="text-xl font-bold">{formatToIdr(calcCartSubtotal(carts) ?? 0)}</h2>
     </div>
   );
 };
@@ -73,11 +62,7 @@ CartSummaryCard.Shipping = ({ children }: { children: ReactNode }) => {
   return (
     <div className="flex items-center justify-between">
       <h2 className="text-foreground/60 text-xl">Delivery Fee</h2>
-      {courier ? (
-        <h2 className="text-xl font-bold">{formatToIdr(courier.cost)}</h2>
-      ) : (
-        children
-      )}
+      {courier ? <h2 className="text-xl font-bold">{formatToIdr(courier.cost)}</h2> : children}
     </div>
   );
 };

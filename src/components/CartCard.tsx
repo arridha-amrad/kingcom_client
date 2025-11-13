@@ -1,18 +1,22 @@
-import type { Cart } from '@/models/cart.model';
-import { formatToIdr } from '@/utils';
-import { Trash } from 'lucide-react';
-import { createContext, useContext, type ReactNode } from 'react';
-import ButtonQuantity from './Button/ButtonQuantity';
+import type { Cart } from '@/models/cart.model'
+import { formatToIdr } from '@/utils'
+import { CheckIcon, Trash } from 'lucide-react'
+import { createContext, useContext, useState, type ReactNode } from 'react'
+import ButtonQuantity from './Button/ButtonQuantity'
+import { useQueryClient } from '@tanstack/react-query'
+import { cacheKey } from '@/constants/cacheKey'
+import { Checkbox } from '@headlessui/react'
+import { useDeleteFromCartMutation } from '@/queryOptions/cart.queryOptions'
 
-const CartCardContext = createContext<{ cart: Cart } | null>(null);
+const CartCardContext = createContext<{ cart: Cart } | null>(null)
 
 const useCartCardContext = () => {
-  const context = useContext(CartCardContext);
+  const context = useContext(CartCardContext)
   if (!context) {
-    throw new Error('Please wrap inside CartCardContext Provider');
+    throw new Error('Please wrap inside CartCardContext Provider')
   }
-  return context;
-};
+  return context
+}
 
 const CartCard = ({ children, cart }: { cart: Cart; children: ReactNode }) => {
   return (
@@ -21,15 +25,15 @@ const CartCard = ({ children, cart }: { cart: Cart; children: ReactNode }) => {
         {children}
       </article>
     </CartCardContext.Provider>
-  );
-};
+  )
+}
 
 CartCard.ProductImage = () => {
   const {
     cart: {
       product: { images },
     },
-  } = useCartCardContext();
+  } = useCartCardContext()
   return (
     <div className="lg:size-[124px] size-[90px] shrink-0 rounded-3xl overflow-hidden">
       <img
@@ -40,55 +44,59 @@ CartCard.ProductImage = () => {
         className="w-full h-full object-cover"
       />
     </div>
-  );
-};
+  )
+}
 
 CartCard.ProductName = () => {
   const {
     cart: {
       product: { name },
     },
-  } = useCartCardContext();
+  } = useCartCardContext()
   return (
     <h1 title={name} className="font-bold text-xl line-clamp-1">
       {name}
     </h1>
-  );
-};
+  )
+}
 
 CartCard.DeleteButton = () => {
-  const {} = useCartCardContext();
+  const { cart } = useCartCardContext()
+  const { mutate } = useDeleteFromCartMutation()
   return (
     <button
+      onClick={() => {
+        mutate(cart.id)
+      }}
       title="delete from cart"
       className="size-10 rounded-full flex items-center justify-center"
     >
       <Trash className="stroke-red-400" />
     </button>
-  );
-};
+  )
+}
 
 CartCard.Price = () => {
   const {
     cart: {
       product: { price, discount },
     },
-  } = useCartCardContext();
+  } = useCartCardContext()
   return (
     <div className="flex gap-2 text-foreground/50">
       <p>Price : </p>
       <p className="">{formatToIdr(price - (discount * price) / 100)}</p>
       <p className="line-through">{formatToIdr(price)}</p>
     </div>
-  );
-};
+  )
+}
 
 CartCard.Discount = () => {
   const {
     cart: {
       product: { discount },
     },
-  } = useCartCardContext();
+  } = useCartCardContext()
   return (
     <div className="inline ">
       <span className="text-foreground/50">Discount :</span>
@@ -96,17 +104,17 @@ CartCard.Discount = () => {
         -{discount}%
       </p>
     </div>
-  );
-};
+  )
+}
 
 CartCard.Weight = () => {
   const {
     cart: {
       product: { weight },
     },
-  } = useCartCardContext();
-  return <p className="text-foreground/50">Weight : {weight} gram</p>;
-};
+  } = useCartCardContext()
+  return <p className="text-foreground/50">Weight : {weight} kg</p>
+}
 
 CartCard.Total = () => {
   const {
@@ -114,27 +122,63 @@ CartCard.Total = () => {
       product: { price, discount },
       quantity,
     },
-  } = useCartCardContext();
+  } = useCartCardContext()
   return (
     <h2 className="font-bold text-2xl">
       {formatToIdr(
-        Math.ceil((price - (price * discount) / 100) * quantity * 10) / 10,
+        Math.ceil((price - (price * discount) / 100) * quantity * 10) / 10
       )}
     </h2>
-  );
-};
+  )
+}
 
 CartCard.Quantity = () => {
+  const qc = useQueryClient()
   const {
-    cart: { quantity },
-  } = useCartCardContext();
+    cart: { quantity, id },
+  } = useCartCardContext()
+
+  const updateQuantity = (type: 'increase' | 'decrease') => {
+    qc.setQueryData(
+      [cacheKey.cart.getCarts],
+      ({ carts }: { carts: Cart[] }) => {
+        const updatedCarts = carts.map((c) => {
+          if (c.id === id) {
+            return {
+              ...c,
+              quantity: type === 'increase' ? c.quantity + 1 : c.quantity - 1,
+            }
+          }
+          return c
+        })
+        return {
+          carts: updatedCarts,
+        }
+      }
+    )
+  }
+
   return (
     <ButtonQuantity
-      onDecrease={() => {}}
-      onIncrease={() => {}}
+      onDecrease={() => updateQuantity('decrease')}
+      onIncrease={() => updateQuantity('increase')}
       value={quantity}
     />
-  );
-};
+  )
+}
 
-export default CartCard;
+CartCard.Checkbox = () => {
+  const [enabled, setEnabled] = useState(true)
+
+  return (
+    <Checkbox
+      checked={enabled}
+      onChange={setEnabled}
+      className="group size-6 rounded-md bg-foreground/10 p-1 ring-1 ring-background/15 ring-inset focus:not-data-focus:outline-none data-focus:outline data-focus:outline-offset-2"
+    >
+      <CheckIcon className="hidden fill-background size-4 group-data-checked:block" />
+    </Checkbox>
+  )
+}
+
+export default CartCard

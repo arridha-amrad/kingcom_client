@@ -1,12 +1,12 @@
-import { Minus, Plus } from 'lucide-react';
-import { SlidingNumber } from '../motion-primitives/slide-number';
-import { cn } from '@/utils';
+import { Minus, Plus } from 'lucide-react'
+import { SlidingNumber } from '../motion-primitives/slide-number'
+import { cn } from '@/utils'
 
 type Props = {
-  onIncrease: VoidFunction;
-  value: number;
-  onDecrease: VoidFunction;
-};
+  onIncrease: VoidFunction
+  value: number
+  onDecrease: VoidFunction
+}
 
 export default function ButtonQuantity({
   onDecrease,
@@ -21,7 +21,7 @@ export default function ButtonQuantity({
       >
         <Minus
           className={cn(
-            value === 1 ? 'stroke-background/20' : 'stroke-background',
+            value === 1 ? 'stroke-background/20' : 'stroke-background'
           )}
         />
       </button>
@@ -35,5 +35,5 @@ export default function ButtonQuantity({
         <Plus className="stroke-background" />
       </button>
     </div>
-  );
+  )
 }

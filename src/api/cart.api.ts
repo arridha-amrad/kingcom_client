@@ -1,38 +1,44 @@
-import { privateAxios } from '@/lib/axiosInterceptor';
-import type { Cart } from '@/models/cart.model';
-import { AxiosError } from 'axios';
-
-const routes = {
-  fetchCart: '/cart',
-  addToCart: '/cart/add',
-};
+import { privateAxios } from '@/lib/axiosInterceptor'
+import type { Cart } from '@/models/cart.model'
+import { AxiosError } from 'axios'
 
 export const addToCart = async (productId: string, quantity: number) => {
   try {
-    const res = await privateAxios.post<{ message: string }>(routes.addToCart, {
+    const res = await privateAxios.post<{ message: string }>('/cart', {
       productId,
       quantity,
-    });
-    const data = res.data;
-    return data.message;
+    })
+    const data = res.data
+    return data.message
   } catch (err) {
-    console.log(err);
+    console.log(err)
     if (err instanceof AxiosError) {
-      throw new Error(err.response?.data.message);
+      throw new Error(err.response?.data.message)
     }
-    throw err;
+    throw err
   }
-};
+}
 
 export const fetchCart = async () => {
   // await new Promise((res) => setTimeout(res, 5000));
   try {
-    const res = await privateAxios.get<{ carts: Cart[] }>(routes.fetchCart);
-    return res.data;
+    const res = await privateAxios.get<{ carts: Cart[] }>('/cart')
+    return res.data
   } catch (err) {
     if (err instanceof AxiosError) {
-      throw new Error(err.response?.data.error);
+      throw new Error(err.response?.data.error)
     }
-    throw err;
+    throw err
   }
-};
+}
+
+export const deleteFromCart = async (cartId: string) => {
+  try {
+    const res = await privateAxios.delete<{ message: string }>(
+      `/cart/${cartId}`
+    )
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}

@@ -1,10 +1,15 @@
+import { cartQueryOptions } from '@/queryOptions/cart.queryOptions';
+import ShippingForm from '@/ShippingForm';
+import { useQuery } from '@tanstack/react-query';
 import { Truck } from 'lucide-react';
-import Modal from '../Modal';
-import ShippingForm from '../Forms/ShippingForm';
 import { useState } from 'react';
+import Modal from '../Modal';
 
 export default function ModalShippingOptions() {
+  const cartsQuery = useQuery(cartQueryOptions);
+
   const [open, setOpen] = useState(false);
+
   return (
     <>
       <button
@@ -15,10 +20,20 @@ export default function ModalShippingOptions() {
         <Truck className="size-5" />
       </button>
       <Modal isOpen={open} onClose={() => setOpen(false)}>
-        <Modal.Title title="Choose Courier" />
-        <Modal.Description description="Select your shipping address and courier service." />
         <div className="w-full max-w-sm">
-          <ShippingForm />
+          <Modal.Title title="Choose Courier" />
+          <Modal.Description description="Select your shipping address and courier service." />
+          <ShippingForm carts={cartsQuery.data?.carts ?? []}>
+            <ShippingForm.Destination>
+              <ShippingForm.SelectProvince />
+              <ShippingForm.SelectCity />
+              <ShippingForm.SelectDistrict />
+              <ShippingForm.InputHomeAddress />
+              <ShippingForm.FindShippingServiceButton />
+            </ShippingForm.Destination>
+            <ShippingForm.AvailableCouriers />
+            <ShippingForm.PickCourier callback={() => setOpen(false)} />
+          </ShippingForm>
         </div>
       </Modal>
     </>

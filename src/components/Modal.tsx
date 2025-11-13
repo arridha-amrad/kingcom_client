@@ -4,21 +4,21 @@ import {
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
-} from '@headlessui/react';
-import { X } from 'lucide-react';
-import { type ReactNode } from 'react';
+} from '@headlessui/react'
+import { X } from 'lucide-react'
+import { type HTMLAttributes, type ReactNode } from 'react'
 
-const Modal = ({
+export default function Modal({
   children,
   onClose,
   isOpen,
   disableBackgroundClose = false,
 }: {
-  children: ReactNode;
-  isOpen: boolean;
-  onClose: VoidFunction;
-  disableBackgroundClose?: boolean;
-}) => {
+  children: ReactNode
+  isOpen: boolean
+  onClose: VoidFunction
+  disableBackgroundClose?: boolean
+}) {
   return (
     <Dialog
       open={isOpen}
@@ -36,7 +36,7 @@ const Modal = ({
         >
           <div className="absolute inset-0 blur-3xl -z-50 bg-foreground/10" />
 
-          <button onClick={onClose} className="absolute top-[5%] right-[5%]">
+          <button onClick={onClose} className="absolute top-4 right-4">
             <X className="stroke-foreground/50 hover:stroke-foreground transition-colors ease-in duration-100" />
           </button>
 
@@ -44,23 +44,28 @@ const Modal = ({
         </DialogPanel>
       </div>
     </Dialog>
-  );
-};
-
-export default Modal;
+  )
+}
 
 Modal.Title = ({ title }: { title: string }) => {
   return (
     <DialogTitle className="font-bold text-4xl text-center">
       {title}
     </DialogTitle>
-  );
-};
+  )
+}
 
 Modal.Description = ({ description }: { description: string }) => {
   return (
     <Description as="div" className="my-4 text-center">
       <p>{description}</p>
     </Description>
-  );
-};
+  )
+}
+
+type ModalContentProps = {
+  children: ReactNode
+} & HTMLAttributes<HTMLDivElement>
+Modal.Content = ({ children, ...props }: ModalContentProps) => {
+  return <div {...props}>{children}</div>
+}

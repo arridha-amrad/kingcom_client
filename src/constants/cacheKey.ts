@@ -3,16 +3,16 @@ export const cacheKey = {
     me: 'me',
   },
   product: {
-    getProducts: 'get-products',
-    getProduct: 'get-product',
+    getProducts: 'products',
+    getProduct: 'product',
   },
   cart: {
-    getCarts: 'get-carts',
+    getCarts: 'carts',
+    shipping: 'carts-shipping',
   },
   shipping: {
     provinces: 'provinces',
     cities: 'cities',
     districts: 'districts',
-    order: 'shipping-order',
   },
 };
