@@ -1,38 +1,39 @@
-import OrderList from '@/components/OrderList';
-import {
-  getMyTransactions,
-  queryKey,
-} from '@/hooks/transactions/useGetTransactions';
-import { createFileRoute } from '@tanstack/react-router';
-import { ChevronRight } from 'lucide-react';
-import { useEffect } from 'react';
+import OrderItem from '@/components/OrderItem'
+import { ordersQueryOptions } from '@/queryOptions/order.queryOptions'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute } from '@tanstack/react-router'
+import { ChevronRight, Loader2 } from 'lucide-react'
+import { useEffect } from 'react'
 
 export const Route = createFileRoute('/_auth/orders')({
   component: RouteComponent,
-  loader: async ({ context }) => {
-    const t = await context.queryClient.ensureQueryData({
-      queryKey: [queryKey],
-      queryFn: getMyTransactions,
-    });
-    return t;
+  loader: async ({ context: { queryClient } }) => {
+    queryClient.ensureQueryData(ordersQueryOptions)
   },
-  onError(err) {
-    console.log('transaction route error : ', err);
-  },
-});
+  pendingComponent: () => (
+    <div className="flex my-4 flex-col items-center justify-center w-full">
+      <Loader2 className="animate-spin size-7" />
+      <span>Loading your orders...</span>
+    </div>
+  ),
+})
 
 function RouteComponent() {
   useEffect(() => {
-    const midtransScriptUrl = import.meta.env.VITE_MIDTRANS_SCRIPT_URL;
-    const myMidtransClientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY;
-    let scriptTag = document.createElement('script');
-    scriptTag.src = midtransScriptUrl;
-    scriptTag.setAttribute('data-client-key', myMidtransClientKey);
-    document.body.appendChild(scriptTag);
+    const midtransScriptUrl = import.meta.env.VITE_MIDTRANS_SCRIPT_URL
+    const myMidtransClientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY
+    let scriptTag = document.createElement('script')
+    scriptTag.src = midtransScriptUrl
+    scriptTag.setAttribute('data-client-key', myMidtransClientKey)
+    document.body.appendChild(scriptTag)
     return () => {
-      document.body.removeChild(scriptTag);
-    };
-  }, []);
+      document.body.removeChild(scriptTag)
+    }
+  }, [])
+
+  const {
+    data: { orders },
+  } = useSuspenseQuery(ordersQueryOptions)
 
   return (
     <main className="px-4">
@@ -44,8 +45,11 @@ function RouteComponent() {
         <ChevronRight />
         <p className="text-foreground">Transactions</p>
       </section>
-      <div className="text-2xl font-bold">Transaction List</div>
-      <OrderList />
+      <div className="space-y-4 my-4">
+        {orders?.map((order) => (
+          <OrderItem key={order.id} item={order} />
+        ))}
+      </div>
     </main>
-  );
+  )
 }

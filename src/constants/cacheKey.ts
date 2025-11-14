@@ -15,4 +15,7 @@ export const cacheKey = {
     cities: 'cities',
     districts: 'districts',
   },
-};
+  order: {
+    getOrders: 'carts',
+  },
+}

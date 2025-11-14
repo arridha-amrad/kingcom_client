@@ -1,21 +1,29 @@
-import ProductDetail from '@/components/ProductDetail';
-import ProductDetailTabs from '@/components/ProductDetail/Tab';
-import YouMightAlsoLike from '@/components/ShowCases/YouMightAlsoLike';
-import { productQueryOptions } from '@/queryOptions/product.queryOptions';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import { ChevronRight } from 'lucide-react';
+import ProductDetail from '@/components/ProductDetail'
+import ProductDetailTabs from '@/components/ProductDetail/Tab'
+import YouMightAlsoLike from '@/components/ShowCases/YouMightAlsoLike'
+import { productQueryOptions } from '@/queryOptions/product.queryOptions'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { createFileRoute } from '@tanstack/react-router'
+import { ChevronRight, Loader2 } from 'lucide-react'
 
 export const Route = createFileRoute('/products/$slug')({
   component: RouteComponent,
-  loader: ({ context: { queryClient }, params: { slug } }) => {
-    queryClient.ensureQueryData(productQueryOptions(slug));
-  },
-});
+})
 
 function RouteComponent() {
-  const { slug } = Route.useParams();
-  const { data } = useSuspenseQuery(productQueryOptions(slug));
+  const { slug } = Route.useParams()
+  const qc = useQueryClient()
+  const { data, isFetching } = useQuery(productQueryOptions(slug, qc))
+  const product = data?.product
+
+  if (!data?.product && isFetching) {
+    return (
+      <div className="flex flex-col gap-y-2 items-center justify-center my-8">
+        <Loader2 className="animate-spin size-10" />
+        <p>Loading product...</p>
+      </div>
+    )
+  }
 
   return (
     <main className="px-4">
@@ -29,12 +37,18 @@ function RouteComponent() {
         <ChevronRight />
         <p>MotherBoard</p>
         <ChevronRight />
-        <p className="text-foreground">{data.product.name}</p>
+        <p className="text-foreground">{data?.product?.name}</p>
       </section>
-      <ProductDetail product={data.product} />
-      <ProductDetailTabs product={data.product} />
+      {product ? (
+        <>
+          <ProductDetail product={product} />
+          <ProductDetailTabs product={product} />
+        </>
+      ) : (
+        <h2>Product not found</h2>
+      )}
       <YouMightAlsoLike />
       <div className="xl:mb-32 mb-16"></div>
     </main>
-  );
+  )
 }

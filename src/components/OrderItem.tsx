@@ -1,37 +1,37 @@
-import { privateAxios } from '@/lib/axiosInterceptor';
-import type { Order } from '@/types/api/transaction';
-import { formatToIdr, transactionDateFormatter } from '@/utils';
-import { useNavigate } from '@tanstack/react-router';
-import { Ship, ShoppingBasket } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { privateAxios } from '@/lib/axiosInterceptor'
+import type { Order } from '@/models/order.model'
+import { formatToIdr, transactionDateFormatter } from '@/utils'
+import { useNavigate } from '@tanstack/react-router'
+import { Ship, ShoppingBag } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 interface Props {
-  item: Order;
+  item: Order
 }
 
 const payViaMidtrans = async (orderId: string) => {
-  let snapToken: string;
+  let snapToken: string
   try {
-    window.snap.show();
-    const res = await privateAxios.get(`/midtrans/${orderId}/token`);
-    snapToken = res.data.token;
+    window.snap.show()
+    const res = await privateAxios.get(`/midtrans/${orderId}/token`)
+    snapToken = res.data.token
     if (!snapToken) {
-      window.snap.hide();
-      throw new Error('Something went wrong');
+      window.snap.hide()
+      throw new Error('Something went wrong')
     }
-    window.snap.pay(snapToken);
+    window.snap.pay(snapToken)
   } catch (err) {
-    console.log(err);
-    toast.error('Failed to get your transaction token. Please try again.');
+    console.log(err)
+    toast.error('Failed to get your transaction token. Please try again.')
   }
-};
+}
 
 export default function OrderItem({ item }: Props) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const pay = async () => {
-    await payViaMidtrans(item.id);
-  };
+    await payViaMidtrans(item.id)
+  }
 
   return (
     <div
@@ -39,7 +39,7 @@ export default function OrderItem({ item }: Props) {
       className="border border-foreground/20 rounded-2xl px-8 py-4 space-y-4"
     >
       <div className="flex items-center gap-4">
-        <ShoppingBasket className="size-6 stroke-foreground fill-foreground" />
+        <ShoppingBag className="size-6 stroke-foreground" />
         <h1>Shopping</h1>
         <p>{transactionDateFormatter(new Date(item.createdAt))}</p>
         <div className="text-background bg-foreground pt-1 px-4 pb-1.5 rounded">
@@ -49,7 +49,7 @@ export default function OrderItem({ item }: Props) {
       </div>
       <div className="flex items-center justify-between gap-4">
         <div className="space-y-4">
-          {item.orderItems.map((i) => (
+          {item.items.map((i) => (
             <div className="flex items-start gap-4" key={i.id}>
               <div className="pr-4">
                 <img
@@ -79,7 +79,7 @@ export default function OrderItem({ item }: Props) {
                     {i.quantity} x{' '}
                     {formatToIdr(
                       i.product.price -
-                        (i.product.price * i.product.discount) / 100,
+                        (i.product.price * i.product.discount) / 100
                     )}
                   </div>
                 ) : (
@@ -115,5 +115,5 @@ export default function OrderItem({ item }: Props) {
         </div>
       </div>
     </div>
-  );
+  )
 }

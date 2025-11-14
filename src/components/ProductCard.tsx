@@ -1,25 +1,24 @@
-'use client';
+'use client'
 
-import type { Product } from '@/models/product.model';
-import { formatToIdr } from '@/utils';
-import { useNavigate } from '@tanstack/react-router';
-import { Flame } from 'lucide-react';
-import Rating from './Rating';
+import type { Product } from '@/models/product.model'
+import { formatToIdr } from '@/utils'
+import { useNavigate } from '@tanstack/react-router'
+import { Flame } from 'lucide-react'
+import Rating from './Rating'
 
 type Props = {
-  product: Product;
-};
+  product: Product
+}
 
-function ProductCard({
-  product: { discount, images, name, price, rating, slug },
-}: Props) {
-  const router = useNavigate();
-  const imageUrl = images[0].url;
+function ProductCard({ product }: Props) {
+  const router = useNavigate()
+  const { discount, images, name, price, rating, slug } = product
+  const imageUrl = images[0].url
 
   return (
     <div
       onClick={() => {
-        router({ to: `/products/${slug}` });
+        router({ to: `/products/${slug}` })
       }}
       className="relative cursor-pointer w-full px-8 py-4 hover:ring-2 rounded-xl transition-all duration-200 ease-linear ring-foreground/20 overflow-hidden space-y-2"
     >
@@ -55,7 +54,7 @@ function ProductCard({
         {formatToIdr(price - (price * discount) / 100)}
       </h2>
     </div>
-  );
+  )
 }
 
-export default ProductCard;
+export default ProductCard

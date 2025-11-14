@@ -14,6 +14,7 @@ import {
   Radio,
   Select,
   Textarea,
+  Description,
 } from '@headlessui/react'
 import { ChevronDownIcon } from 'lucide-react'
 import type {
@@ -166,15 +167,17 @@ ShippingForm.InputHomeAddress = () => {
   const { targetAddress, setTargetAddress } = useShippingFormContext()
   return (
     <Field>
-      <Label className="text-sm/6 font-medium text-foreground">
-        Home Address
-      </Label>
+      <Label className="text-sm/6 font-medium text-foreground">Address</Label>
       <Textarea
         value={targetAddress}
         onChange={(e) => setTargetAddress(e.target.value)}
-        placeholder="Additional detail home address"
+        placeholder="Additional detail address"
         className="w-full h-24 mt-1 resize-none bg-foreground/5 text-foreground rounded-lg p-2 outline-none focus:ring focus:ring-foreground/20 transition-colors duration-200"
       />
+      <Description className="text-xs font-medium text-foreground/50">
+        Add helpful details to your address, such as street name, building
+        number, or nearby landmarks.
+      </Description>
     </Field>
   )
 }

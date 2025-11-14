@@ -1,30 +1,30 @@
-import type { Product } from '@/models/product.model';
-import { formatToIdr } from '@/utils';
-import { Minus, Plus } from 'lucide-react';
-import { useState } from 'react';
-import { SlidingNumber } from '../motion-primitives/slide-number';
-import Rating from '../Rating';
-import AddToCart from './AddToCartBtn';
+import type { Product } from '@/models/product.model'
+import { formatToIdr } from '@/utils'
+import { Minus, Plus } from 'lucide-react'
+import { useState } from 'react'
+import { SlidingNumber } from '../motion-primitives/slide-number'
+import Rating from '../Rating'
+import AddToCart from './AddToCartBtn'
 
 type Props = {
-  product: Product;
-};
+  product: Product
+}
 
 export default function ProductDetailDescription({
   product: { id, name, rating, discount, price, description },
 }: Props) {
-  const [total, setTotal] = useState(1);
+  const [total, setTotal] = useState(1)
 
   const increase = () => {
-    setTotal((val) => (val += 1));
-  };
+    setTotal((val) => (val += 1))
+  }
 
   const decrease = () => {
     setTotal((val) => {
-      if (val === 1) return val;
-      return (val -= 1);
-    });
-  };
+      if (val === 1) return val
+      return (val -= 1)
+    })
+  }
 
   return (
     <div className="flex-1 grow min-h-full max-w-lg lg:max-w-3xl gap-4 flex justify-self-center flex-col justify-between">
@@ -41,15 +41,16 @@ export default function ProductDetailDescription({
             {formatToIdr(price - (price * discount) / 100)}
           </h1>
         )}
-        <h1 className="font-bold text-3xl text-foreground/50">
+        <h1 className="font-bold line-through text-3xl text-foreground/50">
           {formatToIdr(price)}
         </h1>
         <div className="w-[72px] h-[34px] rounded-full bg-[#ff3333]/10 flex items-center justify-center font-medium text-red-500">
           -{discount}%
         </div>
       </div>
-      <p className="font-light">{description}</p>
-      <div className="w-full h-px bg-foreground/10" />
+      <div className="py-4">
+        <p className="font-light">{description}</p>
+      </div>
       <div className="flex items-center gap-4">
         <div className="flex-1 flex h-13 bg-foreground text-background  rounded-full">
           <button
@@ -71,5 +72,5 @@ export default function ProductDetailDescription({
         <AddToCart productId={id} quantity={total} />
       </div>
     </div>
-  );
+  )
 }

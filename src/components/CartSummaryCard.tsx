@@ -1,6 +1,8 @@
+import type { PlaceOrderItem } from '@/api/order.api'
 import { cacheKey } from '@/constants/cacheKey'
 import type { Cart } from '@/models/cart.model'
 import type { Shipping } from '@/models/order.model'
+import { usePlaceOrderMutation } from '@/queryOptions/order.queryOptions'
 import { formatToIdr } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowRightIcon, Tag, Truck } from 'lucide-react'
@@ -11,12 +13,14 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import toast from 'react-hot-toast'
+import Spinner from './Spinner'
 
 const calcCartSubtotal = (carts: Cart[]) => {
   const subTotal = carts.reduce((pv, cv) => {
     const price = cv.product.price
     const discount = cv.product.discount
-    const priceAfterDiscount = price - (price * discount) / 100
+    const priceAfterDiscount = Math.ceil(price - (price * discount) / 100)
     const total = cv.quantity * priceAfterDiscount
     pv += total
     return pv
@@ -27,7 +31,8 @@ const calcCartSubtotal = (carts: Cart[]) => {
 const CartSummaryCardContext = createContext<{
   carts: Cart[]
   courier?: Shipping | null
-}>({ carts: [], courier: null })
+  total: number
+}>({ carts: [], courier: null, total: 0 })
 
 const useCartSummaryContext = () => {
   const context = useContext(CartSummaryCardContext)
@@ -50,8 +55,16 @@ const CartSummaryCard = ({
     enabled: false,
   })
   const courier = data as Shipping | undefined
+  const [total, setTotal] = useState(0)
+  useEffect(() => {
+    if (!!courier) {
+      setTotal(calcCartSubtotal(carts) + courier.cost)
+    } else {
+      setTotal(calcCartSubtotal(carts))
+    }
+  }, [courier, carts])
   return (
-    <CartSummaryCardContext.Provider value={{ carts, courier }}>
+    <CartSummaryCardContext.Provider value={{ carts, courier, total }}>
       <article className="h-max w-full lg:max-w-md shrink-0 border space-y-6 border-foreground/20 p-6 rounded-3xl">
         <h1 className="font-bold text-2xl">Order Summary</h1>
         {children}
@@ -90,21 +103,11 @@ CartSummaryCard.Shipping = ({ children }: { children: ReactNode }) => {
 }
 
 CartSummaryCard.Total = () => {
-  const { carts, courier } = useCartSummaryContext()
-  const [total, setTotal] = useState<number>(0)
-
-  useEffect(() => {
-    if (!courier) {
-      setTotal(calcCartSubtotal(carts))
-    } else {
-      setTotal(calcCartSubtotal(carts) + courier.cost)
-    }
-  }, [courier, carts])
-
+  const { total } = useCartSummaryContext()
   return (
     <div className="flex items-center justify-between">
       <h2 className="text-xl text-foreground/60">Total</h2>
-      <h2 className="text-2xl font-bold">{formatToIdr(total ?? 0)}</h2>
+      <h2 className="text-2xl font-bold">{formatToIdr(total)}</h2>
     </div>
   )
 }
@@ -145,16 +148,34 @@ CartSummaryCard.ApplyCouponButton = () => {
 }
 
 CartSummaryCard.PlaceOrderButton = () => {
-  const { courier } = useCartSummaryContext()
+  const { mutateAsync, isPending } = usePlaceOrderMutation()
+  const { courier, total, carts } = useCartSummaryContext()
+
+  const placeOrder = async () => {
+    if (!courier) {
+      toast.error('courier is empty')
+      return
+    }
+    const items: PlaceOrderItem[] = carts.map((c) => ({
+      cartId: c.id,
+      productId: c.product.id,
+      quantity: c.quantity,
+    }))
+    await mutateAsync({
+      items,
+      shipping: courier,
+      total,
+    })
+  }
 
   return (
     <button
-      disabled={!courier}
-      onClick={() => {}}
+      disabled={!courier || isPending}
+      onClick={placeOrder}
       className="h-15 rounded-full w-full disabled:cursor-default flex items-center justify-center gap-4 bg-foreground font-medium text-background disabled:brightness-50"
     >
       <span className="font-medium">Place Order</span>
-      <ArrowRightIcon />
+      {isPending ? <Spinner /> : <ArrowRightIcon />}
     </button>
   )
 }
