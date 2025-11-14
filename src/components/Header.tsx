@@ -1,22 +1,22 @@
-'use client';
+'use client'
 
-import { cn } from '@/utils';
+import { cn } from '@/utils'
 import {
   Link,
   useLocation,
   useNavigate,
   useRouter,
-} from '@tanstack/react-router';
-import { Search, ShoppingCart } from 'lucide-react';
-import { useState, type ChangeEvent } from 'react';
-import ButtonSearch from './Button/ButtonSearch';
-import ButtonTheme from './Button/ButtonTheme';
-import ButtonUser from './Button/ButtonUser';
+} from '@tanstack/react-router'
+import { Search, ShoppingCart } from 'lucide-react'
+import { useState, type ChangeEvent } from 'react'
+import ButtonSearch from './Button/ButtonSearch'
+import ButtonTheme from './Button/ButtonTheme'
+import ButtonUser from './Button/ButtonUser'
 
 function Header() {
-  const navigate = useNavigate();
-  const loc = useLocation();
-  const pathname = loc.pathname;
+  const navigate = useNavigate()
+  const loc = useLocation()
+  const pathname = loc.pathname
 
   return (
     <header className="h-24 sticky top-0 bg-background/70 backdrop-blur z-50 shrink-0 w-full px-4 flex items-center gap-4">
@@ -44,7 +44,7 @@ function Header() {
             <a href="#brands">Brands</a>
           </li>
         </ul>
-        <SearchField />
+        <SearchProductField />
       </div>
       <div className="flex flex-1 items-center justify-end gap-4">
         <div className="block lg:hidden pt-1">
@@ -56,7 +56,7 @@ function Header() {
         >
           <ShoppingCart
             className={cn(
-              pathname === '/cart' ? 'fill-foreground stroke-foreground' : '',
+              pathname === '/cart' ? 'fill-foreground stroke-foreground' : ''
             )}
           />
           {pathname === '/cart' && <ActiveIndicator />}
@@ -66,23 +66,23 @@ function Header() {
         <ButtonTheme />
       </div>
     </header>
-  );
+  )
 }
 
-export default Header;
+export default Header
 
 const ActiveIndicator = () => (
   <div className="absolute bottom-0 inset-x-0 rounded-full w-3/4 h-1 bg-foreground" />
-);
+)
 
-const SearchField = () => {
-  const router = useRouter();
+const SearchProductField = () => {
+  const router = useRouter()
 
-  const [key, setKey] = useState('');
+  const [key, setKey] = useState('')
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setKey(e.target.value);
-  };
+    setKey(e.target.value)
+  }
 
   const handleSubmit = () => {
     router.navigate({
@@ -90,8 +90,8 @@ const SearchField = () => {
       search: {
         name: key,
       },
-    });
-  };
+    })
+  }
 
   return (
     <div className="relative w-full xl:max-w-[400px] hidden lg:block lg:max-w-sm">
@@ -103,7 +103,7 @@ const SearchField = () => {
         value={key}
         onKeyUp={(e) => {
           if (e.key === 'Enter') {
-            handleSubmit();
+            handleSubmit()
           }
         }}
         onChange={handleChange}
@@ -117,5 +117,5 @@ const SearchField = () => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}

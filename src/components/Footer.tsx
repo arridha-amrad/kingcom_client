@@ -173,10 +173,10 @@ function Footer() {
         </div>
       </footer>
     </div>
-  );
+  )
 }
 
-export default Footer;
+export default Footer
 
 const FooterInfo = () => (
   <div className="flex flex-col justify-between items-center lg:items-start xl:gap-0 gap-4 h-full pb-8 lg:pb-0 max-w-xs lg:max-w-max">
@@ -238,4 +238,4 @@ const FooterInfo = () => (
       </button>
     </div>
   </div>
-);
+)

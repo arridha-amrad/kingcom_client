@@ -1,15 +1,15 @@
-import FormAddProduct from '@/components/Forms/products/FormCreateProduct';
-import { cn } from '@/utils';
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react';
-import { createFileRoute } from '@tanstack/react-router';
+import FormAddProduct from '@/components/Forms/ProductForm/FormCreateProduct'
+import { cn } from '@/utils'
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth/admin')({
   component: RouteComponent,
-});
+})
 
 const className = {
   tab: 'flex-1 rounded-full w-fit outline-none focus:not-data-focus:outline-none data-focus:outline data-focus:outline-foreground data-hover:bg-foreground/5 data-selected:bg-foreground/10 data-selected:data-hover:bg-foreground/10',
-};
+}
 
 function RouteComponent() {
   return (
@@ -29,5 +29,5 @@ function RouteComponent() {
         </TabPanels>
       </TabGroup>
     </main>
-  );
+  )
 }

@@ -1,24 +1,24 @@
-import { useSignup } from '@/hooks/auth/useSignup';
-import { useAppForm } from '@/hooks/useAppForm';
-import { signupSchema } from '@/schemas/auth.schema';
-import { type Dispatch, type SetStateAction } from 'react';
-import toast from 'react-hot-toast';
+import { useSignup } from '@/hooks/auth/useSignup'
+import { useAppForm } from '@/hooks/useAppForm'
+import { signupSchema } from '@/schemas/auth.schema'
+import { type Dispatch, type SetStateAction } from 'react'
+import toast from 'react-hot-toast'
 
 interface Props {
-  setIsLogin: Dispatch<SetStateAction<boolean>>;
+  setIsLogin: Dispatch<SetStateAction<boolean>>
   setRegistrationResult: Dispatch<
     SetStateAction<{
-      message: string;
-      token: string;
+      message: string
+      token: string
     }>
-  >;
+  >
 }
 
 export default function FormSignup({
   setIsLogin,
   setRegistrationResult,
 }: Props) {
-  const { isPending, mutateAsync } = useSignup();
+  const { isPending, mutateAsync } = useSignup()
   const form = useAppForm({
     defaultValues: {
       name: '',
@@ -30,33 +30,33 @@ export default function FormSignup({
       onChange: signupSchema,
     },
     async onSubmit({ value }) {
-      const id = toast.loading('Submitting your data...');
+      const id = toast.loading('Submitting your data...')
       try {
-        const data = await mutateAsync(value);
-        toast.success('Registration is successful', { id });
+        const data = await mutateAsync(value)
+        toast.success('Registration is successful', { id })
         if (data) {
           setRegistrationResult({
             message: data.message,
             token: data.token,
-          });
+          })
         }
       } catch (err) {
         if (err instanceof Error) {
-          console.log(err.message);
-          toast.error(err.message, { id });
+          console.log(err.message)
+          toast.error(err.message, { id })
         }
       }
     },
-  });
+  })
   return (
     <fieldset disabled={isPending}>
       <form
         onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          form.handleSubmit();
+          e.preventDefault()
+          e.stopPropagation()
+          form.handleSubmit()
         }}
-        className="space-y-4"
+        className="space-y-4 w-xs"
       >
         <div className="w-full space-y-4 py-8">
           <form.AppField name="name">
@@ -92,5 +92,5 @@ export default function FormSignup({
         </div>
       </form>
     </fieldset>
-  );
+  )
 }

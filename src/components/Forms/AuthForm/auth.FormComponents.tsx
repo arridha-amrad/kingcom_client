@@ -1,11 +1,11 @@
-import { useFieldContext, useFormContext } from '@/hooks/useAppForm';
-import { cn } from '@/utils';
-import { useStore } from '@tanstack/react-form';
-import { LockKeyhole, Mail, QrCode, User, UserCircle } from 'lucide-react';
-import type { InputHTMLAttributes } from 'react';
+import { useFieldContext, useFormContext } from '@/hooks/useAppForm'
+import { cn } from '@/utils'
+import { useStore } from '@tanstack/react-form'
+import { LockKeyhole, Mail, QrCode, User, UserCircle } from 'lucide-react'
+import type { InputHTMLAttributes } from 'react'
 
 export const AuthSubscribeBtn = ({ label }: { label: string }) => {
-  const form = useFormContext();
+  const form = useFormContext()
   return (
     <form.Subscribe selector={(state) => state.isSubmitting}>
       {(isSubmitting) => (
@@ -18,24 +18,23 @@ export const AuthSubscribeBtn = ({ label }: { label: string }) => {
         </button>
       )}
     </form.Subscribe>
-  );
-};
+  )
+}
 
 const ErrorMessages = ({
   errors,
 }: {
-  errors: Array<string | { message: string }>;
+  errors: Array<string | { message: string }>
 }) => {
   const error =
-    errors[0] &&
-    (typeof errors[0] === 'string' ? errors[0] : errors[0].message);
+    errors[0] && (typeof errors[0] === 'string' ? errors[0] : errors[0].message)
 
-  return <div className="text-sm text-red-400 pl-4 mt-1">{error}</div>;
-};
+  return <div className="text-sm text-red-400 pl-4 mt-1">{error}</div>
+}
 
 export const AuthTextField = (props: InputHTMLAttributes<HTMLInputElement>) => {
-  const field = useFieldContext<string>();
-  const errors = useStore(field.store, (state) => state.meta.errors);
+  const field = useFieldContext<string>()
+  const errors = useStore(field.store, (state) => state.meta.errors)
   return (
     <div className="w-full">
       <div className="relative w-full">
@@ -44,7 +43,7 @@ export const AuthTextField = (props: InputHTMLAttributes<HTMLInputElement>) => {
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
           className={cn(
-            'bg-foreground/10 focus:ring-2 pl-12 pr-4 ring-foreground/50 outline-0 w-full h-[3rem] rounded-full',
+            'bg-foreground/10 focus:ring-2 pl-12 pr-4 ring-foreground/50 outline-0 w-full h-12 rounded-full'
           )}
           {...props}
         />
@@ -66,5 +65,5 @@ export const AuthTextField = (props: InputHTMLAttributes<HTMLInputElement>) => {
       </div>
       {field.state.meta.isDirty && <ErrorMessages errors={errors} />}
     </div>
-  );
-};
+  )
+}

@@ -1,14 +1,14 @@
-import { cartQueryOptions } from '@/queryOptions/cart.queryOptions';
-import ShippingForm from '@/ShippingForm';
-import { useQuery } from '@tanstack/react-query';
-import { Truck } from 'lucide-react';
-import { useState } from 'react';
-import Modal from '../Modal';
+import { cartQueryOptions } from '@/queryOptions/cart.queryOptions'
+import ShippingForm from '@/components/Forms/ShippingForm'
+import { useQuery } from '@tanstack/react-query'
+import { Truck } from 'lucide-react'
+import { useState } from 'react'
+import Modal from './Modal'
 
 export default function ModalShippingOptions() {
-  const cartsQuery = useQuery(cartQueryOptions);
+  const cartsQuery = useQuery(cartQueryOptions)
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   return (
     <>
@@ -37,5 +37,5 @@ export default function ModalShippingOptions() {
         </div>
       </Modal>
     </>
-  );
+  )
 }

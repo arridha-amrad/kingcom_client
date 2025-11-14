@@ -1,11 +1,11 @@
-import { ChevronDown } from 'lucide-react';
-import ModalFilter from './ModalFilter';
-import ProductCard from './ProductCard';
-import type { Product } from '@/models/product.model';
+import { ChevronDown } from 'lucide-react'
+import ModalFilter from './Modals/ModalFilter'
+import ProductCard from './ProductCard'
+import type { Product } from '@/models/product.model'
 
 type Props = {
-  products: Product[];
-};
+  products: Product[]
+}
 
 function Products({ products }: Props) {
   return (
@@ -31,7 +31,7 @@ function Products({ products }: Props) {
         ))}
       </div>
     </section>
-  );
+  )
 }
 
-export default Products;
+export default Products

@@ -1,21 +1,20 @@
-import { useFieldContext, useFormContext } from '@/hooks/useAppForm';
-import { useStore } from '@tanstack/react-form';
-import { DollarSign, Image } from 'lucide-react';
-import { useEffect, useId, useRef } from 'react';
+import { useFieldContext, useFormContext } from '@/hooks/useAppForm'
+import { useStore } from '@tanstack/react-form'
+import { DollarSign, Image } from 'lucide-react'
+import { useEffect, useId, useRef } from 'react'
 
 const ErrorMessage = ({
   errors,
 }: {
-  errors: Array<string | { message: string }>;
+  errors: Array<string | { message: string }>
 }) => {
   const error =
-    errors[0] &&
-    (typeof errors[0] === 'string' ? errors[0] : errors[0].message);
-  return <div className="text-red-400 text-sm ml-4">{error}</div>;
-};
+    errors[0] && (typeof errors[0] === 'string' ? errors[0] : errors[0].message)
+  return <div className="text-red-400 text-sm ml-4">{error}</div>
+}
 
 export const ProductSubmitButton = () => {
-  const form = useFormContext();
+  const form = useFormContext()
   return (
     <form.Subscribe selector={(state) => state.isSubmitting}>
       {(isSubmitting) => (
@@ -28,24 +27,24 @@ export const ProductSubmitButton = () => {
         </button>
       )}
     </form.Subscribe>
-  );
-};
+  )
+}
 
 export const ProductTextArea = ({ label }: { label: string }) => {
-  const id = useId();
-  const field = useFieldContext<string>();
-  const errors = useStore(field.store, (state) => state.meta.errors);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const id = useId()
+  const field = useFieldContext<string>()
+  const errors = useStore(field.store, (state) => state.meta.errors)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const handleInput = () => {
-    const textarea = textAreaRef.current;
+    const textarea = textAreaRef.current
     if (textarea) {
-      textarea.style.height = 'auto'; // reset height
-      textarea.style.height = textarea.scrollHeight + 'px'; // set new height
+      textarea.style.height = 'auto' // reset height
+      textarea.style.height = textarea.scrollHeight + 'px' // set new height
     }
-  };
+  }
   useEffect(() => {
-    handleInput();
-  }, [field.state.value]);
+    handleInput()
+  }, [field.state.value])
   return (
     <div className="w-full">
       <label className="mx-4 space-y-2 mt-4" htmlFor={id}>
@@ -64,19 +63,19 @@ export const ProductTextArea = ({ label }: { label: string }) => {
       ></textarea>
       {field.state.meta.isDirty && <ErrorMessage errors={errors} />}
     </div>
-  );
-};
+  )
+}
 
 export const ProductInput = ({
   label,
   type,
 }: {
-  label: string;
-  type: 'text' | 'number';
+  label: string
+  type: 'text' | 'number'
 }) => {
-  const id = useId();
-  const field = useFieldContext<string>();
-  const errors = useStore(field.store, (state) => state.meta.errors);
+  const id = useId()
+  const field = useFieldContext<string>()
+  const errors = useStore(field.store, (state) => state.meta.errors)
   return (
     <div className="w-full space-y-2 mt-4">
       <label className="mx-4 block" htmlFor={id}>
@@ -99,5 +98,5 @@ export const ProductInput = ({
       </div>
       {field.state.meta.isDirty && <ErrorMessage errors={errors} />}
     </div>
-  );
-};
+  )
+}

@@ -1,25 +1,25 @@
-'use client';
+'use client'
 
-import { useSearch } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
-import FormEmailVerification from '../Forms/auth/FormEmailVerification';
-import FormLogin from '../Forms/auth/FormLogin';
-import FormSignup from '../Forms/auth/FormSignup';
-import Modal from '../Modal';
+import { useSearch } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
+import FormEmailVerification from '../Forms/AuthForm/FormEmailVerification'
+import FormLogin from '../Forms/AuthForm/FormLogin'
+import FormSignup from '../Forms/AuthForm/FormSignup'
+import Modal from './Modal'
 
 export default function ModalLoginOrSignup() {
-  const [isOpen, setIsOpen] = useState(false);
-  const search = useSearch({ strict: false }) as any;
+  const [isOpen, setIsOpen] = useState(false)
+  const search = useSearch({ strict: false }) as any
 
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(true)
   const [registrationResult, setRegistrationResult] = useState({
     message: '',
     token: '',
-  });
+  })
 
   useEffect(() => {
-    setIsOpen(search.login === 'required');
-  }, [search.login]);
+    setIsOpen(search.login === 'required')
+  }, [search.login])
 
   return (
     <>
@@ -30,26 +30,28 @@ export default function ModalLoginOrSignup() {
         Login
       </button>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <Modal.Title title={isLogin ? 'Login' : 'Signup'} />
-        <Modal.Description
-          description={
-            isLogin ? "Let's start using your account" : 'Create new account'
-          }
-        />
-        {isLogin ? (
-          <FormLogin setIsLogin={setIsLogin} setIsOpen={setIsOpen} />
-        ) : !!registrationResult.token ? (
-          <FormEmailVerification
-            registrationResult={registrationResult}
-            setIsOpen={setIsOpen}
+        <div className="w-full max-w-sm">
+          <Modal.Title title={isLogin ? 'Login' : 'Signup'} />
+          <Modal.Description
+            description={
+              isLogin ? "Let's start using your account" : 'Create new account'
+            }
           />
-        ) : (
-          <FormSignup
-            setIsLogin={setIsLogin}
-            setRegistrationResult={setRegistrationResult}
-          />
-        )}
+          {isLogin ? (
+            <FormLogin setIsLogin={setIsLogin} setIsOpen={setIsOpen} />
+          ) : !!registrationResult.token ? (
+            <FormEmailVerification
+              registrationResult={registrationResult}
+              setIsOpen={setIsOpen}
+            />
+          ) : (
+            <FormSignup
+              setIsLogin={setIsLogin}
+              setRegistrationResult={setRegistrationResult}
+            />
+          )}
+        </div>
       </Modal>
     </>
-  );
+  )
 }

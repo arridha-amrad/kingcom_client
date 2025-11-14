@@ -1,37 +1,27 @@
-import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
-import {
-  Select,
-  SubscribeButton,
-  TextArea,
-  TextField,
-} from '../components/demo.FormComponents';
+import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import {
   AuthSubscribeBtn,
   AuthTextField,
-} from '@/components/Forms/auth/auth.FormComponents';
+} from '@/components/Forms/AuthForm/auth.FormComponents'
 import {
   ProductInput,
   ProductSubmitButton,
   ProductTextArea,
-} from '@/components/Forms/products/product.FormComponent';
+} from '@/components/Forms/ProductForm/product.FormComponent'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
-  createFormHookContexts();
+  createFormHookContexts()
 
 export const { useAppForm } = createFormHook({
   fieldComponents: {
-    TextField,
-    Select,
-    TextArea,
     AuthTextField,
     ProductTextArea,
     ProductInput,
   },
   formComponents: {
-    SubscribeButton,
     AuthSubscribeBtn,
     ProductSubmitButton,
   },
   fieldContext,
   formContext,
-});
+})

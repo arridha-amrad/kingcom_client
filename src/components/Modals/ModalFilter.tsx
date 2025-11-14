@@ -1,6 +1,6 @@
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { useEffect, useState } from 'react'
-import ProductFilter from './ProductFilter'
+import ProductFilter from '../ProductFilter'
 
 function ModalFilter() {
   const [isOpen, setIsOpen] = useState(false)

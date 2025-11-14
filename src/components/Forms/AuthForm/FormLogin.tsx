@@ -1,20 +1,20 @@
-import { useLogin } from '@/hooks/auth/useLogin';
-import { useAppForm } from '@/hooks/useAppForm';
-import { setAccessToken } from '@/lib/axiosInterceptor';
-import { useLoginMutation } from '@/queryOptions/auth.queryOptions';
-import { loginSchema } from '@/schemas/auth.schema';
-import { Description, DialogTitle } from '@headlessui/react';
-import { Link, useRouter, useRouterState } from '@tanstack/react-router';
-import { type Dispatch, type SetStateAction } from 'react';
-import toast from 'react-hot-toast';
+import { useLogin } from '@/hooks/auth/useLogin'
+import { useAppForm } from '@/hooks/useAppForm'
+import { setAccessToken } from '@/lib/axiosInterceptor'
+import { useLoginMutation } from '@/queryOptions/auth.queryOptions'
+import { loginSchema } from '@/schemas/auth.schema'
+import { Description, DialogTitle } from '@headlessui/react'
+import { Link, useRouter, useRouterState } from '@tanstack/react-router'
+import { type Dispatch, type SetStateAction } from 'react'
+import toast from 'react-hot-toast'
 
 interface Props {
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-  setIsLogin: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>
+  setIsLogin: Dispatch<SetStateAction<boolean>>
 }
 
 export default function FormLogin({ setIsOpen, setIsLogin }: Props) {
-  const { mutateAsync, isPending } = useLoginMutation();
+  const { mutateAsync, isPending } = useLoginMutation()
   const form = useAppForm({
     defaultValues: {
       identity: '',
@@ -27,19 +27,19 @@ export default function FormLogin({ setIsOpen, setIsLogin }: Props) {
       await mutateAsync({
         identity,
         password,
-      });
-      setIsOpen(false);
+      })
+      setIsOpen(false)
     },
-  });
+  })
   return (
     <fieldset disabled={isPending}>
       <form
         onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          form.handleSubmit();
+          e.preventDefault()
+          e.stopPropagation()
+          form.handleSubmit()
         }}
-        className="space-y-4"
+        className="space-y-4 w-xs"
       >
         <div className="w-full space-y-4 py-8">
           <form.AppField name="identity">
@@ -75,5 +75,5 @@ export default function FormLogin({ setIsOpen, setIsLogin }: Props) {
         </div>
       </form>
     </fieldset>
-  );
+  )
 }

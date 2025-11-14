@@ -1,39 +1,55 @@
-import { cacheKey } from '@/constants/cacheKey';
-import type { Cart } from '@/models/cart.model';
-import type { Shipping } from '@/models/order.model';
-import { formatToIdr } from '@/utils';
-import { useQuery } from '@tanstack/react-query';
-import { ArrowRightIcon, Tag, Truck } from 'lucide-react';
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { cacheKey } from '@/constants/cacheKey'
+import type { Cart } from '@/models/cart.model'
+import type { Shipping } from '@/models/order.model'
+import { formatToIdr } from '@/utils'
+import { useQuery } from '@tanstack/react-query'
+import { ArrowRightIcon, Tag, Truck } from 'lucide-react'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from 'react'
 
 const calcCartSubtotal = (carts: Cart[]) => {
   const subTotal = carts.reduce((pv, cv) => {
-    const price = cv.product.price;
-    const discount = cv.product.discount;
-    const priceAfterDiscount = price - (price * discount) / 100;
-    const total = cv.quantity * priceAfterDiscount;
-    pv += total;
-    return pv;
-  }, 0);
-  return subTotal;
-};
+    const price = cv.product.price
+    const discount = cv.product.discount
+    const priceAfterDiscount = price - (price * discount) / 100
+    const total = cv.quantity * priceAfterDiscount
+    pv += total
+    return pv
+  }, 0)
+  return subTotal
+}
 
 const CartSummaryCardContext = createContext<{
-  carts: Cart[];
-  courier?: Shipping | null;
-}>({ carts: [], courier: null });
+  carts: Cart[]
+  courier?: Shipping | null
+}>({ carts: [], courier: null })
 
 const useCartSummaryContext = () => {
-  const context = useContext(CartSummaryCardContext);
+  const context = useContext(CartSummaryCardContext)
   if (!context) {
-    throw new Error('Please wrap inside CartSummaryCardContext Provider');
+    throw new Error('Please wrap inside CartSummaryCardContext Provider')
   }
-  return context;
-};
+  return context
+}
 
-const CartSummaryCard = ({ carts, children }: { children: ReactNode; carts: Cart[] }) => {
-  const { data } = useQuery({ queryKey: [cacheKey.cart.shipping], queryFn: () => null, enabled: false });
-  const courier = data as Shipping | undefined;
+const CartSummaryCard = ({
+  carts,
+  children,
+}: {
+  children: ReactNode
+  carts: Cart[]
+}) => {
+  const { data } = useQuery({
+    queryKey: [cacheKey.cart.shipping],
+    queryFn: () => null,
+    enabled: false,
+  })
+  const courier = data as Shipping | undefined
   return (
     <CartSummaryCardContext.Provider value={{ carts, courier }}>
       <article className="h-max w-full lg:max-w-md shrink-0 border space-y-6 border-foreground/20 p-6 rounded-3xl">
@@ -41,58 +57,64 @@ const CartSummaryCard = ({ carts, children }: { children: ReactNode; carts: Cart
         {children}
       </article>
     </CartSummaryCardContext.Provider>
-  );
-};
+  )
+}
 
-export default CartSummaryCard;
+export default CartSummaryCard
 
 CartSummaryCard.SubTotal = () => {
-  const { carts } = useCartSummaryContext();
+  const { carts } = useCartSummaryContext()
 
   return (
     <div className="flex items-center justify-between">
       <h2 className="text-foreground/60 text-xl">SubTotal</h2>
-      <h2 className="text-xl font-bold">{formatToIdr(calcCartSubtotal(carts) ?? 0)}</h2>
+      <h2 className="text-xl font-bold">
+        {formatToIdr(calcCartSubtotal(carts) ?? 0)}
+      </h2>
     </div>
-  );
-};
+  )
+}
 
 CartSummaryCard.Shipping = ({ children }: { children: ReactNode }) => {
-  const { courier } = useCartSummaryContext();
+  const { courier } = useCartSummaryContext()
   return (
     <div className="flex items-center justify-between">
       <h2 className="text-foreground/60 text-xl">Delivery Fee</h2>
-      {courier ? <h2 className="text-xl font-bold">{formatToIdr(courier.cost)}</h2> : children}
+      {courier ? (
+        <h2 className="text-xl font-bold">{formatToIdr(courier.cost)}</h2>
+      ) : (
+        children
+      )}
     </div>
-  );
-};
+  )
+}
 
 CartSummaryCard.Total = () => {
-  const { carts, courier } = useCartSummaryContext();
-  const [total, setTotal] = useState<number>(0);
+  const { carts, courier } = useCartSummaryContext()
+  const [total, setTotal] = useState<number>(0)
 
   useEffect(() => {
     if (!courier) {
-      setTotal(calcCartSubtotal(carts));
+      setTotal(calcCartSubtotal(carts))
     } else {
-      setTotal(calcCartSubtotal(carts) + courier.cost);
+      setTotal(calcCartSubtotal(carts) + courier.cost)
     }
-  }, [courier, carts]);
+  }, [courier, carts])
 
   return (
     <div className="flex items-center justify-between">
-      <h2 className="text-xl">Total</h2>
+      <h2 className="text-xl text-foreground/60">Total</h2>
       <h2 className="text-2xl font-bold">{formatToIdr(total ?? 0)}</h2>
     </div>
-  );
-};
+  )
+}
 
 CartSummaryCard.CouponContainer = ({ children }: { children: ReactNode }) => {
-  return <div className="h-12 w-full flex gap-4 items-center">{children}</div>;
-};
+  return <div className="h-12 w-full flex gap-4 items-center">{children}</div>
+}
 
 CartSummaryCard.CouponInput = () => {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState('')
   return (
     <div className="flex-2 h-full">
       <div className="relative bg-foreground/10 text-foreground w-full h-full rounded-full overflow-hidden">
@@ -108,31 +130,34 @@ CartSummaryCard.CouponInput = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 CartSummaryCard.ApplyCouponButton = () => {
   return (
     <button
-      disabled={false}
-      className="flex-1 disabled:brightness-75 disabled:cursor-default font-medium h-full bg-foreground rounded-full text-background"
+      disabled={true}
+      className="flex-1 disabled:brightness-50 disabled:cursor-default font-medium h-full bg-foreground rounded-full text-background"
     >
       Apply
     </button>
-  );
-};
+  )
+}
 
 CartSummaryCard.PlaceOrderButton = () => {
+  const { courier } = useCartSummaryContext()
+
   return (
     <button
+      disabled={!courier}
       onClick={() => {}}
-      className="h-15 rounded-full w-full disabled:cursor-default flex items-center justify-center gap-4 bg-foreground font-medium text-background disabled:brightness-75"
+      className="h-15 rounded-full w-full disabled:cursor-default flex items-center justify-center gap-4 bg-foreground font-medium text-background disabled:brightness-50"
     >
       <span className="font-medium">Place Order</span>
       <ArrowRightIcon />
     </button>
-  );
-};
+  )
+}
 
 CartSummaryCard.ButtonPickCourier = ({ onOpen }: { onOpen: VoidFunction }) => {
   return (
@@ -143,5 +168,5 @@ CartSummaryCard.ButtonPickCourier = ({ onOpen }: { onOpen: VoidFunction }) => {
       Choose Courier
       <Truck className="size-5" />
     </button>
-  );
-};
+  )
+}

@@ -1,10 +1,10 @@
-import useCreateProduct from '@/hooks/product/useCreateProduct';
-import { useAppForm } from '@/hooks/useAppForm';
-import { createProductSchema } from '@/schemas/product';
-import toast from 'react-hot-toast';
+import useCreateProduct from '@/hooks/product/useCreateProduct'
+import { useAppForm } from '@/hooks/useAppForm'
+import { createProductSchema } from '@/schemas/product'
+import toast from 'react-hot-toast'
 
 export default function FormAddProduct() {
-  const { mutateAsync, isPending } = useCreateProduct();
+  const { mutateAsync, isPending } = useCreateProduct()
   const form = useAppForm({
     defaultValues: {
       name: '',
@@ -35,10 +35,10 @@ export default function FormAddProduct() {
         imageTwo,
       },
     }) => {
-      const id = toast.loading('Submitting new product data...');
+      const id = toast.loading('Submitting new product data...')
       const images = [imageOne, imageTwo, imageThree, imageFour].filter(
-        (v) => v !== '',
-      );
+        (v) => v !== ''
+      )
       try {
         await mutateAsync({
           images,
@@ -48,23 +48,23 @@ export default function FormAddProduct() {
           specification,
           stock: parseInt(stock.toString()),
           videoUrl,
-        });
-        toast.success('New product added', { id });
-        form.reset();
+        })
+        toast.success('New product added', { id })
+        form.reset()
       } catch (err: unknown) {
         if (err instanceof Error) {
-          toast.error(err.message, { id });
+          toast.error(err.message, { id })
         }
       }
     },
-  });
+  })
   return (
     <fieldset disabled={isPending}>
       <form
         onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          form.handleSubmit();
+          e.preventDefault()
+          e.stopPropagation()
+          form.handleSubmit()
         }}
         className="my-8 space-y-8"
       >
@@ -119,5 +119,5 @@ export default function FormAddProduct() {
         </form.AppForm>
       </form>
     </fieldset>
-  );
+  )
 }
