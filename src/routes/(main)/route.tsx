@@ -2,7 +2,7 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 import SpecialOfferAlert from '@/components/Alert/SpecialOfferAlert.tsx'
 import Footer from '@/components/Footer.tsx'
-import Header from '@/components/Header.tsx'
+import Header from '@/components/Header'
 import NewsLetter from '@/components/NewsLetter.tsx'
 
 export const Route = createFileRoute('/(main)')({

@@ -5,7 +5,12 @@ import {
   setAccessToken,
 } from '@/lib/axiosInterceptor'
 import type { User } from '@/models/user.model'
-import type { LoginParams, SignupParams } from '@/schemas/auth.schema'
+import type {
+  ForgotPasswordParams,
+  LoginParams,
+  ResetPasswordParams,
+  SignupParams,
+} from '@/schemas/auth.schema'
 import {
   queryOptions,
   useMutation,
@@ -24,6 +29,22 @@ const routes = {
   resetPassword: '/auth/reset-password',
   signup: '/auth/signup',
   verifyAccount: '/auth/verify-account',
+}
+
+export const useForgotPasswordMutation = () => {
+  return useMutation({
+    mutationFn: async (params: ForgotPasswordParams) => {
+      try {
+        const res = await publicAxios.post<{ message: string }>(
+          routes.forgotPassword,
+          params
+        )
+        return res.data
+      } catch (err: unknown) {
+        errorHandler(err)
+      }
+    },
+  })
 }
 
 export const useSignupMutation = () => {
@@ -141,4 +162,20 @@ export const getAuthQueryOptions = () =>
 
 export const useFetchAuth = () => {
   return useQuery(getAuthQueryOptions())
+}
+
+export const useResetPasswordMutation = () => {
+  return useMutation({
+    mutationFn: async (params: ResetPasswordParams & { token: string }) => {
+      try {
+        const res = await privateAxios.post<{ message: string }>(
+          routes.resetPassword,
+          params
+        )
+        return res.data
+      } catch (err: unknown) {
+        errorHandler(err)
+      }
+    },
+  })
 }

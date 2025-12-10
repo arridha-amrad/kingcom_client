@@ -1,13 +1,12 @@
-import { useAddToCartMutation } from '@/queryOptions/cart.queryOptions';
+import { useAddToCartMutation } from '@/hooks/cart.hooks'
 
 interface Props {
-  productId: string;
-  quantity: number;
+  productId: string
+  quantity: number
 }
 
 export default function AddToCart({ productId, quantity }: Props) {
-  const { mutate, isPending } = useAddToCartMutation();
-
+  const { mutate, isPending } = useAddToCartMutation()
   return (
     <button
       disabled={isPending}
@@ -16,5 +15,5 @@ export default function AddToCart({ productId, quantity }: Props) {
     >
       Add To Cart
     </button>
-  );
+  )
 }

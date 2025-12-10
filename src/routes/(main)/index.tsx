@@ -8,6 +8,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(main)/')({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      {
+        title: 'Kingcom | Home',
+        description: 'Online Shop that sell all kind of computer products',
+      },
+    ],
+  }),
 })
 
 function RouteComponent() {

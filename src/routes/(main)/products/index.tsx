@@ -1,31 +1,34 @@
-import ProductFilter from '@/components/ProductFilter';
-import ProductsWrapper from '@/components/ProductsWrapper';
-import { createFileRoute } from '@tanstack/react-router';
-import { ChevronRightIcon, Loader2 } from 'lucide-react';
-import { Suspense } from 'react';
+import ProductFilter from '@/components/ProductFilter'
+import ProductsWrapper from '@/components/ProductsWrapper'
+import { createFileRoute } from '@tanstack/react-router'
+import { ChevronRightIcon, Loader2 } from 'lucide-react'
+import { Suspense } from 'react'
 
 export const Route = createFileRoute('/(main)/products/')({
   component: RouteComponent,
+  head: () => ({
+    meta: [{ title: 'Kingcom | products' }],
+  }),
   loaderDeps: ({ search }) => {
-    const { name, limit, page } = search as any;
+    const { name, limit, page } = search as any
     return {
       name,
       limit,
       page,
-    };
+    }
   },
-});
+})
 
 function Spinner() {
   return (
     <div className="flex justify-center w-full">
       <Loader2 className="animate-spin size-7" />
     </div>
-  );
+  )
 }
 
 function RouteComponent() {
-  const deps = Route.useLoaderDeps();
+  const deps = Route.useLoaderDeps()
 
   return (
     <main className="w-full px-4">
@@ -48,5 +51,5 @@ function RouteComponent() {
         </Suspense>
       </div>
     </main>
-  );
+  )
 }

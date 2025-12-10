@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as mainRouteRouteImport } from './routes/(main)/route'
+import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as DummyIndexRouteImport } from './routes/dummy/index'
 import { Route as mainIndexRouteImport } from './routes/(main)/index'
 import { Route as mainAuthRouteImport } from './routes/(main)/_auth'
@@ -31,6 +32,10 @@ const mainRouteRoute = mainRouteRouteImport.update({
   id: '/(main)',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authRouteRoute = authRouteRouteImport.update({
+  id: '/(auth)',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DummyIndexRoute = DummyIndexRouteImport.update({
   id: '/dummy/',
   path: '/dummy/',
@@ -46,29 +51,29 @@ const mainAuthRoute = mainAuthRouteImport.update({
   getParentRoute: () => mainRouteRoute,
 } as any)
 const authVerifyRoute = authVerifyRouteImport.update({
-  id: '/(auth)/verify',
+  id: '/verify',
   path: '/verify',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => authRouteRoute,
 } as any)
 const authSignupRoute = authSignupRouteImport.update({
-  id: '/(auth)/signup',
+  id: '/signup',
   path: '/signup',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => authRouteRoute,
 } as any)
 const authResetPasswordRoute = authResetPasswordRouteImport.update({
-  id: '/(auth)/reset-password',
+  id: '/reset-password',
   path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => authRouteRoute,
 } as any)
 const authLoginRoute = authLoginRouteImport.update({
-  id: '/(auth)/login',
+  id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => authRouteRoute,
 } as any)
 const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
-  id: '/(auth)/forgot-password',
+  id: '/forgot-password',
   path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => authRouteRoute,
 } as any)
 const mainProductsIndexRoute = mainProductsIndexRouteImport.update({
   id: '/products/',
@@ -147,6 +152,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/(auth)': typeof authRouteRouteWithChildren
   '/(main)': typeof mainRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/login': typeof authLoginRoute
@@ -202,6 +208,7 @@ export interface FileRouteTypes {
     | '/dummy/demo/form/simple'
   id:
     | '__root__'
+    | '/(auth)'
     | '/(main)'
     | '/(auth)/forgot-password'
     | '/(auth)/login'
@@ -222,12 +229,8 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  authRouteRoute: typeof authRouteRouteWithChildren
   mainRouteRoute: typeof mainRouteRouteWithChildren
-  authForgotPasswordRoute: typeof authForgotPasswordRoute
-  authLoginRoute: typeof authLoginRoute
-  authResetPasswordRoute: typeof authResetPasswordRoute
-  authSignupRoute: typeof authSignupRoute
-  authVerifyRoute: typeof authVerifyRoute
   DummyIndexRoute: typeof DummyIndexRoute
   DummyDemoTanstackQueryRoute: typeof DummyDemoTanstackQueryRoute
   DummyDemoFormAddressRoute: typeof DummyDemoFormAddressRoute
@@ -241,6 +244,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof mainRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)': {
+      id: '/(auth)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof authRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dummy/': {
@@ -269,35 +279,35 @@ declare module '@tanstack/react-router' {
       path: '/verify'
       fullPath: '/verify'
       preLoaderRoute: typeof authVerifyRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof authRouteRoute
     }
     '/(auth)/signup': {
       id: '/(auth)/signup'
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof authSignupRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof authRouteRoute
     }
     '/(auth)/reset-password': {
       id: '/(auth)/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof authResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof authRouteRoute
     }
     '/(auth)/login': {
       id: '/(auth)/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof authLoginRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof authRouteRoute
     }
     '/(auth)/forgot-password': {
       id: '/(auth)/forgot-password'
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof authForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof authRouteRoute
     }
     '/(main)/products/': {
       id: '/(main)/products/'
@@ -358,6 +368,26 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface authRouteRouteChildren {
+  authForgotPasswordRoute: typeof authForgotPasswordRoute
+  authLoginRoute: typeof authLoginRoute
+  authResetPasswordRoute: typeof authResetPasswordRoute
+  authSignupRoute: typeof authSignupRoute
+  authVerifyRoute: typeof authVerifyRoute
+}
+
+const authRouteRouteChildren: authRouteRouteChildren = {
+  authForgotPasswordRoute: authForgotPasswordRoute,
+  authLoginRoute: authLoginRoute,
+  authResetPasswordRoute: authResetPasswordRoute,
+  authSignupRoute: authSignupRoute,
+  authVerifyRoute: authVerifyRoute,
+}
+
+const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
+  authRouteRouteChildren,
+)
+
 interface mainAuthRouteChildren {
   mainAuthAdminRoute: typeof mainAuthAdminRoute
   mainAuthCartRoute: typeof mainAuthCartRoute
@@ -393,12 +423,8 @@ const mainRouteRouteWithChildren = mainRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  authRouteRoute: authRouteRouteWithChildren,
   mainRouteRoute: mainRouteRouteWithChildren,
-  authForgotPasswordRoute: authForgotPasswordRoute,
-  authLoginRoute: authLoginRoute,
-  authResetPasswordRoute: authResetPasswordRoute,
-  authSignupRoute: authSignupRoute,
-  authVerifyRoute: authVerifyRoute,
   DummyIndexRoute: DummyIndexRoute,
   DummyDemoTanstackQueryRoute: DummyDemoTanstackQueryRoute,
   DummyDemoFormAddressRoute: DummyDemoFormAddressRoute,

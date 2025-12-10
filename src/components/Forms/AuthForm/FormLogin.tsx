@@ -24,9 +24,9 @@ export default function FormLogin() {
         password,
       })
       const redirect = searchParams.get('redirect')
-      if (result && redirect) {
+      if (result) {
         navigate({
-          to: redirect,
+          to: redirect || '/',
         })
       }
     },

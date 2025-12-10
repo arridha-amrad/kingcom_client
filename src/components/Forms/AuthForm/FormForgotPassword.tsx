@@ -1,33 +1,39 @@
-import { useLoginMutation } from '@/hooks/auth.hooks'
+import { useForgotPasswordMutation } from '@/hooks/auth.hooks'
 import { useAppForm } from '@/hooks/useAppForm'
-import { loginSchema } from '@/schemas/auth.schema'
-import { Link, useLocation, useNavigate } from '@tanstack/react-router'
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordParams,
+} from '@/schemas/auth.schema'
+import { Link } from '@tanstack/react-router'
 import { Mail } from 'lucide-react'
+import { useState } from 'react'
+import toast from 'react-hot-toast'
 
 export default function FormForgotPassword() {
-  const { mutateAsync, isPending } = useLoginMutation()
-  const location = useLocation()
-  const navigate = useNavigate()
-  const searchParams = new URLSearchParams(location.search)
+  const { mutateAsync, isPending } = useForgotPasswordMutation()
+
+  const [message, setMessage] = useState<string | null>(null)
 
   const form = useAppForm({
     defaultValues: {
-      identity: '',
-      password: '',
-    },
+      email: '',
+    } as ForgotPasswordParams,
     validators: {
-      onChange: loginSchema,
+      onChange: forgotPasswordSchema,
     },
-    async onSubmit({ value: { identity, password } }) {
-      const result = await mutateAsync({
-        identity,
-        password,
-      })
-      const redirect = searchParams.get('redirect')
-      if (result && redirect) {
-        navigate({
-          to: redirect,
+    async onSubmit({ value: { email }, formApi }) {
+      try {
+        const result = await mutateAsync({
+          email,
         })
+        if (result) {
+          setMessage(result.message)
+          formApi.reset()
+        }
+      } catch (err) {
+        if (err instanceof Error) {
+          toast.error(err.message)
+        }
       }
     },
   })
@@ -39,6 +45,12 @@ export default function FormForgotPassword() {
       <p className="py-2 text-foreground/50">
         Recover account access using password reset link.{' '}
       </p>
+
+      {!!message && (
+        <div className="py-2">
+          <p className="text-center text-green-500">{message}</p>
+        </div>
+      )}
       <fieldset className="w-full" disabled={isPending}>
         <form
           onSubmit={(e) => {
@@ -49,7 +61,7 @@ export default function FormForgotPassword() {
           className="space-y-4 w-full"
         >
           <div className="w-full space-y-4 py-4">
-            <form.AppField name="identity">
+            <form.AppField name="email">
               {(field) => (
                 <field.AuthTextField
                   type="text"

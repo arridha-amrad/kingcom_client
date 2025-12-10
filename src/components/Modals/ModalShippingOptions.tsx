@@ -1,12 +1,12 @@
-import { cartQueryOptions } from '@/queryOptions/cart.queryOptions'
 import ShippingForm from '@/components/Forms/ShippingForm'
 import { useQuery } from '@tanstack/react-query'
 import { Truck } from 'lucide-react'
 import { useState } from 'react'
 import Modal from './Modal'
+import { cartQueryOptions } from '@/queryOptions/cart.queryOptions'
 
 export default function ModalShippingOptions() {
-  const cartsQuery = useQuery(cartQueryOptions)
+  const { data } = useQuery(cartQueryOptions)
 
   const [open, setOpen] = useState(false)
 
@@ -23,7 +23,7 @@ export default function ModalShippingOptions() {
         <div className="w-full max-w-sm">
           <Modal.Title title="Choose Courier" />
           <Modal.Description description="Select your shipping address and courier service." />
-          <ShippingForm carts={cartsQuery.data?.carts ?? []}>
+          <ShippingForm carts={data?.carts ?? []}>
             <ShippingForm.Destination>
               <ShippingForm.SelectProvince />
               <ShippingForm.SelectCity />

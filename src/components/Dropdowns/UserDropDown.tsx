@@ -6,6 +6,7 @@ import {
   MenuItem,
   MenuItems,
   MenuSeparator,
+  MenuHeading,
 } from '@headlessui/react'
 import {
   ChevronDown,
@@ -21,7 +22,7 @@ import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useFetchAuth } from '@/hooks/auth.hooks'
 
-export default function Example() {
+export default function UserDropDown() {
   const { data } = useFetchAuth()
   const [isModalOpen, setModalOpen] = useState(false)
   const router = useNavigate()
@@ -42,11 +43,19 @@ export default function Example() {
           <User />
           <ChevronDown className="size-4 fill-white/60" />
         </MenuButton>
+
         <MenuItems
           transition
           anchor="bottom end"
-          className="w-52 mt-2 z-[999] origin-top-right rounded-xl border border-foreground/10 bg-background/70 backdrop-blur-lg p-1 text-sm/6 text-foreground transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+          className="w-52 mt-2 z-99 origin-top-right rounded-xl border border-foreground/10 bg-background/70 backdrop-blur-lg p-1 text-sm/6 text-foreground transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
         >
+          <MenuItem disabled>
+            <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-foreground/10">
+              <User className="size-4" />
+              {data.name}
+            </button>
+          </MenuItem>
+          <MenuSeparator className="my-1 h-0.5 rounded-full bg-foreground/10" />
           {data.role === 'admin' && (
             <MenuItem>
               {({ close }) => (

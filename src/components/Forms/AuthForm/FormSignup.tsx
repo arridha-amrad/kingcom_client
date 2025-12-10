@@ -1,11 +1,12 @@
 import { useSignupMutation } from '@/hooks/auth.hooks'
 import { useAppForm } from '@/hooks/useAppForm'
-import { signupSchema } from '@/schemas/auth.schema'
-import { Link } from '@tanstack/react-router'
+import { signupSchema, type SignupParams } from '@/schemas/auth.schema'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Mail, User, Lock, UserRoundIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function FormSignup() {
+  const navigate = useNavigate()
   const { isPending, mutateAsync } = useSignupMutation()
   const form = useAppForm({
     defaultValues: {
@@ -13,18 +14,26 @@ export default function FormSignup() {
       email: '',
       username: '',
       password: '',
-    },
+      confirmPassword: '',
+    } as SignupParams,
     validators: {
       onChange: signupSchema,
+      onSubmit: signupSchema,
     },
-    async onSubmit({ value }) {
+    async onSubmit({ value, formApi }) {
       const id = toast.loading('Submitting your data...')
       try {
         const data = await mutateAsync(value)
-        toast.success('Registration is successful', { id })
+        if (data) {
+          toast.success('Registration is successful', { id })
+          formApi.reset()
+          navigate({
+            to: '/verify',
+            search: { token: data.token, message: data.message },
+          })
+        }
       } catch (err) {
         if (err instanceof Error) {
-          console.log(err.message)
           toast.error(err.message, { id })
         }
       }
@@ -79,6 +88,15 @@ export default function FormSignup() {
                   icon={<Lock className="stroke-foreground/50" />}
                   type="password"
                   placeholder="Password"
+                />
+              )}
+            </form.AppField>
+            <form.AppField name="confirmPassword">
+              {(field) => (
+                <field.AuthTextField
+                  icon={<Lock className="stroke-foreground/50" />}
+                  type="password"
+                  placeholder="Confirm Password"
                 />
               )}
             </form.AppField>

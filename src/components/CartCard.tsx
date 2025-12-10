@@ -6,7 +6,7 @@ import ButtonQuantity from './Button/ButtonQuantity'
 import { useQueryClient } from '@tanstack/react-query'
 import { cacheKey } from '@/constants/cacheKey'
 import { Checkbox } from '@headlessui/react'
-import { useDeleteFromCartMutation } from '@/queryOptions/cart.queryOptions'
+import { useRemoveCartItemMutation } from '@/hooks/cart.hooks'
 
 const CartCardContext = createContext<{ cart: Cart } | null>(null)
 
@@ -62,7 +62,7 @@ CartCard.ProductName = () => {
 
 CartCard.DeleteButton = () => {
   const { cart } = useCartCardContext()
-  const { mutate } = useDeleteFromCartMutation()
+  const { mutate } = useRemoveCartItemMutation()
   return (
     <button
       onClick={() => {

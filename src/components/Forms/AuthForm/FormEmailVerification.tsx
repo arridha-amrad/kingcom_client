@@ -2,16 +2,16 @@ import { useVerifyMutation } from '@/hooks/auth.hooks'
 import { useAppForm } from '@/hooks/useAppForm'
 import { setAccessToken } from '@/lib/axiosInterceptor'
 import { emailVerificationSchema } from '@/schemas/auth.schema'
-import { Description, DialogTitle } from '@headlessui/react'
-import { Link, useLocation, useNavigate } from '@tanstack/react-router'
+import { getRouteApi, Link, useNavigate } from '@tanstack/react-router'
 import { QrCode } from 'lucide-react'
 import toast from 'react-hot-toast'
 
+const routeApi = getRouteApi('/(auth)/verify')
+
 export default function FormEmailVerification() {
-  const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
-  const token = searchParams.get('token')
-  const message = searchParams.get('message')
+  const routeSearch = routeApi.useSearch() as { token: string; message: string }
+  const token = routeSearch.token
+  const message = routeSearch.message
 
   const navigate = useNavigate()
 
@@ -36,10 +36,10 @@ export default function FormEmailVerification() {
         })
         if (data) {
           setAccessToken(data.token)
+          formApi.reset()
+          toast.success('Email verification is successful', { id })
+          navigate({ to: '/' })
         }
-        formApi.reset()
-        toast.success('Email verification is successful', { id })
-        navigate({ to: '/' })
       } catch (err) {
         if (err instanceof Error) {
           toast.error(err.message, { id })
@@ -53,6 +53,9 @@ export default function FormEmailVerification() {
       <p className="py-2 text-foreground/50">
         Verification protects accounts by confirming user authenticity
       </p>
+      <div className="py-2">
+        <p className="text-green-500 text-center">{message}</p>
+      </div>
       <fieldset className="w-full" disabled={isPending}>
         <form
           onSubmit={(e) => {

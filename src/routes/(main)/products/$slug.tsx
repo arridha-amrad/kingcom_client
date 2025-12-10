@@ -8,6 +8,13 @@ import { ChevronRight, Loader2 } from 'lucide-react'
 
 export const Route = createFileRoute('/(main)/products/$slug')({
   component: RouteComponent,
+  head: (ctx) => ({
+    meta: [
+      {
+        title: `Kingcom | ${ctx.params.slug}`,
+      },
+    ],
+  }),
 })
 
 function RouteComponent() {
