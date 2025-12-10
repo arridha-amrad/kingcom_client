@@ -9,36 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
-import { Route as AuthRouteImport } from './routes/_auth'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProductsIndexRouteImport } from './routes/products/index'
+import { Route as mainRouteRouteImport } from './routes/(main)/route'
 import { Route as DummyIndexRouteImport } from './routes/dummy/index'
-import { Route as ProductsSlugRouteImport } from './routes/products/$slug'
-import { Route as AuthOrdersRouteImport } from './routes/_auth.orders'
-import { Route as AuthCartRouteImport } from './routes/_auth.cart'
-import { Route as AuthAdminRouteImport } from './routes/_auth.admin'
+import { Route as mainIndexRouteImport } from './routes/(main)/index'
+import { Route as mainAuthRouteImport } from './routes/(main)/_auth'
+import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
+import { Route as authSignupRouteImport } from './routes/(auth)/signup'
+import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
+import { Route as mainProductsIndexRouteImport } from './routes/(main)/products/index'
 import { Route as DummyDemoTanstackQueryRouteImport } from './routes/dummy/demo.tanstack-query'
+import { Route as mainProductsSlugRouteImport } from './routes/(main)/products/$slug'
+import { Route as mainAuthOrdersRouteImport } from './routes/(main)/_auth.orders'
+import { Route as mainAuthCartRouteImport } from './routes/(main)/_auth.cart'
+import { Route as mainAuthAdminRouteImport } from './routes/(main)/_auth.admin'
 import { Route as DummyDemoFormSimpleRouteImport } from './routes/dummy/demo.form.simple'
 import { Route as DummyDemoFormAddressRouteImport } from './routes/dummy/demo.form.address'
 
-const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/_auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProductsIndexRoute = ProductsIndexRouteImport.update({
-  id: '/products/',
-  path: '/products/',
+const mainRouteRoute = mainRouteRouteImport.update({
+  id: '/(main)',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DummyIndexRoute = DummyIndexRouteImport.update({
@@ -46,30 +36,69 @@ const DummyIndexRoute = DummyIndexRouteImport.update({
   path: '/dummy/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProductsSlugRoute = ProductsSlugRouteImport.update({
-  id: '/products/$slug',
-  path: '/products/$slug',
+const mainIndexRoute = mainIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => mainRouteRoute,
+} as any)
+const mainAuthRoute = mainAuthRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => mainRouteRoute,
+} as any)
+const authVerifyRoute = authVerifyRouteImport.update({
+  id: '/(auth)/verify',
+  path: '/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthOrdersRoute = AuthOrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => AuthRoute,
+const authSignupRoute = authSignupRouteImport.update({
+  id: '/(auth)/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthCartRoute = AuthCartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
-  getParentRoute: () => AuthRoute,
+const authResetPasswordRoute = authResetPasswordRouteImport.update({
+  id: '/(auth)/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthAdminRoute = AuthAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthRoute,
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
+  id: '/(auth)/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const mainProductsIndexRoute = mainProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => mainRouteRoute,
 } as any)
 const DummyDemoTanstackQueryRoute = DummyDemoTanstackQueryRouteImport.update({
   id: '/dummy/demo/tanstack-query',
   path: '/dummy/demo/tanstack-query',
   getParentRoute: () => rootRouteImport,
+} as any)
+const mainProductsSlugRoute = mainProductsSlugRouteImport.update({
+  id: '/products/$slug',
+  path: '/products/$slug',
+  getParentRoute: () => mainRouteRoute,
+} as any)
+const mainAuthOrdersRoute = mainAuthOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => mainAuthRoute,
+} as any)
+const mainAuthCartRoute = mainAuthCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => mainAuthRoute,
+} as any)
+const mainAuthAdminRoute = mainAuthAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => mainAuthRoute,
 } as any)
 const DummyDemoFormSimpleRoute = DummyDemoFormSimpleRouteImport.update({
   id: '/dummy/demo/form/simple',
@@ -83,96 +112,123 @@ const DummyDemoFormAddressRoute = DummyDemoFormAddressRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/admin': typeof AuthAdminRoute
-  '/cart': typeof AuthCartRoute
-  '/orders': typeof AuthOrdersRoute
-  '/products/$slug': typeof ProductsSlugRoute
+  '/forgot-password': typeof authForgotPasswordRoute
+  '/login': typeof authLoginRoute
+  '/reset-password': typeof authResetPasswordRoute
+  '/signup': typeof authSignupRoute
+  '/verify': typeof authVerifyRoute
+  '/': typeof mainIndexRoute
   '/dummy': typeof DummyIndexRoute
-  '/products': typeof ProductsIndexRoute
+  '/admin': typeof mainAuthAdminRoute
+  '/cart': typeof mainAuthCartRoute
+  '/orders': typeof mainAuthOrdersRoute
+  '/products/$slug': typeof mainProductsSlugRoute
   '/dummy/demo/tanstack-query': typeof DummyDemoTanstackQueryRoute
+  '/products': typeof mainProductsIndexRoute
   '/dummy/demo/form/address': typeof DummyDemoFormAddressRoute
   '/dummy/demo/form/simple': typeof DummyDemoFormSimpleRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/admin': typeof AuthAdminRoute
-  '/cart': typeof AuthCartRoute
-  '/orders': typeof AuthOrdersRoute
-  '/products/$slug': typeof ProductsSlugRoute
+  '/forgot-password': typeof authForgotPasswordRoute
+  '/login': typeof authLoginRoute
+  '/reset-password': typeof authResetPasswordRoute
+  '/signup': typeof authSignupRoute
+  '/verify': typeof authVerifyRoute
+  '/': typeof mainIndexRoute
   '/dummy': typeof DummyIndexRoute
-  '/products': typeof ProductsIndexRoute
+  '/admin': typeof mainAuthAdminRoute
+  '/cart': typeof mainAuthCartRoute
+  '/orders': typeof mainAuthOrdersRoute
+  '/products/$slug': typeof mainProductsSlugRoute
   '/dummy/demo/tanstack-query': typeof DummyDemoTanstackQueryRoute
+  '/products': typeof mainProductsIndexRoute
   '/dummy/demo/form/address': typeof DummyDemoFormAddressRoute
   '/dummy/demo/form/simple': typeof DummyDemoFormSimpleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_auth': typeof AuthRouteWithChildren
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/_auth/admin': typeof AuthAdminRoute
-  '/_auth/cart': typeof AuthCartRoute
-  '/_auth/orders': typeof AuthOrdersRoute
-  '/products/$slug': typeof ProductsSlugRoute
+  '/(main)': typeof mainRouteRouteWithChildren
+  '/(auth)/forgot-password': typeof authForgotPasswordRoute
+  '/(auth)/login': typeof authLoginRoute
+  '/(auth)/reset-password': typeof authResetPasswordRoute
+  '/(auth)/signup': typeof authSignupRoute
+  '/(auth)/verify': typeof authVerifyRoute
+  '/(main)/_auth': typeof mainAuthRouteWithChildren
+  '/(main)/': typeof mainIndexRoute
   '/dummy/': typeof DummyIndexRoute
-  '/products/': typeof ProductsIndexRoute
+  '/(main)/_auth/admin': typeof mainAuthAdminRoute
+  '/(main)/_auth/cart': typeof mainAuthCartRoute
+  '/(main)/_auth/orders': typeof mainAuthOrdersRoute
+  '/(main)/products/$slug': typeof mainProductsSlugRoute
   '/dummy/demo/tanstack-query': typeof DummyDemoTanstackQueryRoute
+  '/(main)/products/': typeof mainProductsIndexRoute
   '/dummy/demo/form/address': typeof DummyDemoFormAddressRoute
   '/dummy/demo/form/simple': typeof DummyDemoFormSimpleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/signup'
+    | '/verify'
+    | '/'
+    | '/dummy'
     | '/admin'
     | '/cart'
     | '/orders'
     | '/products/$slug'
-    | '/dummy'
-    | '/products'
     | '/dummy/demo/tanstack-query'
+    | '/products'
     | '/dummy/demo/form/address'
     | '/dummy/demo/form/simple'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/signup'
+    | '/verify'
+    | '/'
+    | '/dummy'
     | '/admin'
     | '/cart'
     | '/orders'
     | '/products/$slug'
-    | '/dummy'
-    | '/products'
     | '/dummy/demo/tanstack-query'
+    | '/products'
     | '/dummy/demo/form/address'
     | '/dummy/demo/form/simple'
   id:
     | '__root__'
-    | '/'
-    | '/_auth'
-    | '/forgot-password'
-    | '/_auth/admin'
-    | '/_auth/cart'
-    | '/_auth/orders'
-    | '/products/$slug'
+    | '/(main)'
+    | '/(auth)/forgot-password'
+    | '/(auth)/login'
+    | '/(auth)/reset-password'
+    | '/(auth)/signup'
+    | '/(auth)/verify'
+    | '/(main)/_auth'
+    | '/(main)/'
     | '/dummy/'
-    | '/products/'
+    | '/(main)/_auth/admin'
+    | '/(main)/_auth/cart'
+    | '/(main)/_auth/orders'
+    | '/(main)/products/$slug'
     | '/dummy/demo/tanstack-query'
+    | '/(main)/products/'
     | '/dummy/demo/form/address'
     | '/dummy/demo/form/simple'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthRoute: typeof AuthRouteWithChildren
-  ForgotPasswordRoute: typeof ForgotPasswordRoute
-  ProductsSlugRoute: typeof ProductsSlugRoute
+  mainRouteRoute: typeof mainRouteRouteWithChildren
+  authForgotPasswordRoute: typeof authForgotPasswordRoute
+  authLoginRoute: typeof authLoginRoute
+  authResetPasswordRoute: typeof authResetPasswordRoute
+  authSignupRoute: typeof authSignupRoute
+  authVerifyRoute: typeof authVerifyRoute
   DummyIndexRoute: typeof DummyIndexRoute
-  ProductsIndexRoute: typeof ProductsIndexRoute
   DummyDemoTanstackQueryRoute: typeof DummyDemoTanstackQueryRoute
   DummyDemoFormAddressRoute: typeof DummyDemoFormAddressRoute
   DummyDemoFormSimpleRoute: typeof DummyDemoFormSimpleRoute
@@ -180,32 +236,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/forgot-password': {
-      id: '/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof ForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth': {
-      id: '/_auth'
+    '/(main)': {
+      id: '/(main)'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/products/': {
-      id: '/products/'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsIndexRouteImport
+      preLoaderRoute: typeof mainRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dummy/': {
@@ -215,33 +250,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DummyIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/products/$slug': {
-      id: '/products/$slug'
-      path: '/products/$slug'
-      fullPath: '/products/$slug'
-      preLoaderRoute: typeof ProductsSlugRouteImport
+    '/(main)/': {
+      id: '/(main)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof mainIndexRouteImport
+      parentRoute: typeof mainRouteRoute
+    }
+    '/(main)/_auth': {
+      id: '/(main)/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof mainAuthRouteImport
+      parentRoute: typeof mainRouteRoute
+    }
+    '/(auth)/verify': {
+      id: '/(auth)/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof authVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/orders': {
-      id: '/_auth/orders'
-      path: '/orders'
-      fullPath: '/orders'
-      preLoaderRoute: typeof AuthOrdersRouteImport
-      parentRoute: typeof AuthRoute
+    '/(auth)/signup': {
+      id: '/(auth)/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof authSignupRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_auth/cart': {
-      id: '/_auth/cart'
-      path: '/cart'
-      fullPath: '/cart'
-      preLoaderRoute: typeof AuthCartRouteImport
-      parentRoute: typeof AuthRoute
+    '/(auth)/reset-password': {
+      id: '/(auth)/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof authResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_auth/admin': {
-      id: '/_auth/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthAdminRouteImport
-      parentRoute: typeof AuthRoute
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/forgot-password': {
+      id: '/(auth)/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof authForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(main)/products/': {
+      id: '/(main)/products/'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof mainProductsIndexRouteImport
+      parentRoute: typeof mainRouteRoute
     }
     '/dummy/demo/tanstack-query': {
       id: '/dummy/demo/tanstack-query'
@@ -249,6 +312,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/dummy/demo/tanstack-query'
       preLoaderRoute: typeof DummyDemoTanstackQueryRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(main)/products/$slug': {
+      id: '/(main)/products/$slug'
+      path: '/products/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof mainProductsSlugRouteImport
+      parentRoute: typeof mainRouteRoute
+    }
+    '/(main)/_auth/orders': {
+      id: '/(main)/_auth/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof mainAuthOrdersRouteImport
+      parentRoute: typeof mainAuthRoute
+    }
+    '/(main)/_auth/cart': {
+      id: '/(main)/_auth/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof mainAuthCartRouteImport
+      parentRoute: typeof mainAuthRoute
+    }
+    '/(main)/_auth/admin': {
+      id: '/(main)/_auth/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof mainAuthAdminRouteImport
+      parentRoute: typeof mainAuthRoute
     }
     '/dummy/demo/form/simple': {
       id: '/dummy/demo/form/simple'
@@ -267,27 +358,48 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthRouteChildren {
-  AuthAdminRoute: typeof AuthAdminRoute
-  AuthCartRoute: typeof AuthCartRoute
-  AuthOrdersRoute: typeof AuthOrdersRoute
+interface mainAuthRouteChildren {
+  mainAuthAdminRoute: typeof mainAuthAdminRoute
+  mainAuthCartRoute: typeof mainAuthCartRoute
+  mainAuthOrdersRoute: typeof mainAuthOrdersRoute
 }
 
-const AuthRouteChildren: AuthRouteChildren = {
-  AuthAdminRoute: AuthAdminRoute,
-  AuthCartRoute: AuthCartRoute,
-  AuthOrdersRoute: AuthOrdersRoute,
+const mainAuthRouteChildren: mainAuthRouteChildren = {
+  mainAuthAdminRoute: mainAuthAdminRoute,
+  mainAuthCartRoute: mainAuthCartRoute,
+  mainAuthOrdersRoute: mainAuthOrdersRoute,
 }
 
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+const mainAuthRouteWithChildren = mainAuthRoute._addFileChildren(
+  mainAuthRouteChildren,
+)
+
+interface mainRouteRouteChildren {
+  mainAuthRoute: typeof mainAuthRouteWithChildren
+  mainIndexRoute: typeof mainIndexRoute
+  mainProductsSlugRoute: typeof mainProductsSlugRoute
+  mainProductsIndexRoute: typeof mainProductsIndexRoute
+}
+
+const mainRouteRouteChildren: mainRouteRouteChildren = {
+  mainAuthRoute: mainAuthRouteWithChildren,
+  mainIndexRoute: mainIndexRoute,
+  mainProductsSlugRoute: mainProductsSlugRoute,
+  mainProductsIndexRoute: mainProductsIndexRoute,
+}
+
+const mainRouteRouteWithChildren = mainRouteRoute._addFileChildren(
+  mainRouteRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AuthRoute: AuthRouteWithChildren,
-  ForgotPasswordRoute: ForgotPasswordRoute,
-  ProductsSlugRoute: ProductsSlugRoute,
+  mainRouteRoute: mainRouteRouteWithChildren,
+  authForgotPasswordRoute: authForgotPasswordRoute,
+  authLoginRoute: authLoginRoute,
+  authResetPasswordRoute: authResetPasswordRoute,
+  authSignupRoute: authSignupRoute,
+  authVerifyRoute: authVerifyRoute,
   DummyIndexRoute: DummyIndexRoute,
-  ProductsIndexRoute: ProductsIndexRoute,
   DummyDemoTanstackQueryRoute: DummyDemoTanstackQueryRoute,
   DummyDemoFormAddressRoute: DummyDemoFormAddressRoute,
   DummyDemoFormSimpleRoute: DummyDemoFormSimpleRoute,

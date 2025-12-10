@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ChevronRight, Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 
-export const Route = createFileRoute('/_auth/orders')({
+export const Route = createFileRoute('/(main)/_auth/orders')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
     queryClient.ensureQueryData(ordersQueryOptions)

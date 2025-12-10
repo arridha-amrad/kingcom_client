@@ -3,7 +3,7 @@ import { cn } from '@/utils'
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_auth/admin')({
+export const Route = createFileRoute('/(main)/_auth/admin')({
   component: RouteComponent,
 })
 

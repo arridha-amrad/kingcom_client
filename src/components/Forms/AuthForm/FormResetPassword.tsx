@@ -4,7 +4,7 @@ import { loginSchema } from '@/schemas/auth.schema'
 import { Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { User, Lock } from 'lucide-react'
 
-export default function FormLogin() {
+export default function FormResetPassword() {
   const { mutateAsync, isPending } = useLoginMutation()
   const location = useLocation()
   const navigate = useNavigate()
@@ -33,9 +33,9 @@ export default function FormLogin() {
   })
   return (
     <div className="max-w-sm w-full">
-      <h1 className="font-header text-4xl tracking-wide">Login</h1>
+      <h1 className="font-header text-4xl tracking-wide">Reset Password</h1>
       <p className="py-2 text-foreground/50">
-        Login enables safe access to personalized user features.
+        Update password securely to restore account access.
       </p>
       <fieldset className="w-full" disabled={isPending}>
         <form
@@ -66,24 +66,16 @@ export default function FormLogin() {
               )}
             </form.AppField>
             <form.AppForm>
-              <form.AuthSubscribeBtn label="Login" />
+              <form.AuthSubscribeBtn label="Reset Password" />
             </form.AppForm>
           </div>
-          <div className="text-center">
-            <Link
-              className="text-foreground/50 hover:text-foreground"
-              to="/forgot-password"
-            >
-              Forgot Password
-            </Link>
-          </div>
           <div className=" flex items-center gap-2 justify-center">
-            <p className="text-foreground/50">Don't have an account?</p>
+            <p className="text-foreground/50">Back to</p>
             <Link
               className="text-foreground/50 hover:text-foreground"
-              to="/signup"
+              to="/login"
             >
-              Sign Up
+              Login
             </Link>
           </div>
         </form>

@@ -12,6 +12,7 @@ import { useState, type ChangeEvent } from 'react'
 import ButtonSearch from './Button/ButtonSearch'
 import ButtonTheme from './Button/ButtonTheme'
 import ButtonUser from './Button/ButtonUser'
+import Button from './ui/Button'
 
 function Header() {
   const navigate = useNavigate()
@@ -61,7 +62,8 @@ function Header() {
           />
           {pathname === '/cart' && <ActiveIndicator />}
         </button>
-        <ButtonUser />
+        {/* <ButtonUser /> */}
+        <Button onClick={() => navigate({ to: '/login' })}>Login</Button>
         <div className="h-5 w-1 bg-foreground/10 rounded-full" />
         <ButtonTheme />
       </div>

@@ -1,8 +1,8 @@
 import { useFieldContext, useFormContext } from '@/hooks/useAppForm'
 import { cn } from '@/utils'
 import { useStore } from '@tanstack/react-form'
-import { LockKeyhole, Mail, QrCode, User, UserCircle } from 'lucide-react'
-import type { InputHTMLAttributes } from 'react'
+import { useState, type InputHTMLAttributes } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 
 export const AuthSubscribeBtn = ({ label }: { label: string }) => {
   const form = useFormContext()
@@ -12,7 +12,7 @@ export const AuthSubscribeBtn = ({ label }: { label: string }) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-4 flex items-center justify-center gap-2 py-2 font-semibold bg-foreground w-full disabled:brightness-75 text-background rounded-full"
+          className="px-4 flex items-center justify-center gap-2 h-16 text-xl font-semibold bg-foreground w-full disabled:brightness-75 text-background rounded-full"
         >
           {label}
         </button>
@@ -32,9 +32,13 @@ const ErrorMessages = ({
   return <div className="text-sm text-red-400 pl-4 mt-1">{error}</div>
 }
 
-export const AuthTextField = (props: InputHTMLAttributes<HTMLInputElement>) => {
+export const AuthTextField = ({
+  icon,
+  ...props
+}: { icon: React.ReactNode } & InputHTMLAttributes<HTMLInputElement>) => {
   const field = useFieldContext<string>()
   const errors = useStore(field.store, (state) => state.meta.errors)
+  const [showPassword, setShowPassword] = useState(false)
   return (
     <div className="w-full">
       <div className="relative w-full">
@@ -43,25 +47,36 @@ export const AuthTextField = (props: InputHTMLAttributes<HTMLInputElement>) => {
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
           className={cn(
-            'bg-foreground/10 focus:ring-2 pl-12 pr-4 ring-foreground/50 outline-0 w-full h-12 rounded-full'
+            'bg-foreground/10 focus:ring-2 pl-16 pr-4 ring-foreground/50 text-xl outline-0 w-full h-16 rounded-full',
+            props.type === 'password' ? 'pr-16' : 'pr-4'
           )}
           {...props}
+          type={
+            props.type === 'password'
+              ? showPassword
+                ? 'text'
+                : 'password'
+              : props.type
+          }
         />
-        <div className="absolute top-1/2 -translate-y-1/2 left-3 aspect-square">
-          {field.name?.includes('email') && (
-            <Mail className="stroke-foreground/20" />
-          )}
-          {field.name?.includes('password') && (
-            <LockKeyhole className="stroke-foreground/20" />
-          )}
-          {field.name === 'username' && (
-            <UserCircle className="stroke-foreground/20" />
-          )}
-          {(field.name === 'name' || field.name === 'identity') && (
-            <User className="stroke-foreground/20" />
-          )}
-          {field.name === 'code' && <QrCode className="stroke-foreground/20" />}
+        <div className="absolute top-1/2 -translate-y-1/2 left-4 aspect-square">
+          {icon}
         </div>
+        {props.type === 'password' && (
+          <div className="absolute top-1/2 -translate-y-1/2 right-4 aspect-square">
+            {showPassword ? (
+              <EyeOff
+                onClick={() => setShowPassword(false)}
+                className="stroke-foreground/50"
+              />
+            ) : (
+              <Eye
+                onClick={() => setShowPassword(true)}
+                className="stroke-foreground/50"
+              />
+            )}
+          </div>
+        )}
       </div>
       {field.state.meta.isDirty && <ErrorMessages errors={errors} />}
     </div>

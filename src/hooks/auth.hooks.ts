@@ -78,7 +78,6 @@ export const useVerifyMutation = () => {
         )
         return res.data
       } catch (err: unknown) {
-        console.log(err)
         errorHandler(err)
       }
     },
@@ -98,7 +97,6 @@ export const useLogoutMutation = () => {
         const res = await privateAxios.post<{ message: string }>(routes.logout)
         return res.data
       } catch (err: unknown) {
-        console.log(err)
         errorHandler(err)
       }
     },

@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronRight, Loader2 } from 'lucide-react'
 
-export const Route = createFileRoute('/products/$slug')({
+export const Route = createFileRoute('/(main)/products/$slug')({
   component: RouteComponent,
 })
 

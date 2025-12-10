@@ -2,9 +2,9 @@ import { useLoginMutation } from '@/hooks/auth.hooks'
 import { useAppForm } from '@/hooks/useAppForm'
 import { loginSchema } from '@/schemas/auth.schema'
 import { Link, useLocation, useNavigate } from '@tanstack/react-router'
-import { User, Lock } from 'lucide-react'
+import { Mail } from 'lucide-react'
 
-export default function FormLogin() {
+export default function FormForgotPassword() {
   const { mutateAsync, isPending } = useLoginMutation()
   const location = useLocation()
   const navigate = useNavigate()
@@ -33,9 +33,11 @@ export default function FormLogin() {
   })
   return (
     <div className="max-w-sm w-full">
-      <h1 className="font-header text-4xl tracking-wide">Login</h1>
+      <h1 className="font-header text-4xl tracking-wide leading-10">
+        Forgot Password
+      </h1>
       <p className="py-2 text-foreground/50">
-        Login enables safe access to personalized user features.
+        Recover account access using password reset link.{' '}
       </p>
       <fieldset className="w-full" disabled={isPending}>
         <form
@@ -51,39 +53,22 @@ export default function FormLogin() {
               {(field) => (
                 <field.AuthTextField
                   type="text"
-                  placeholder="Username or email"
-                  icon={<User className="stroke-foreground/50" />}
-                />
-              )}
-            </form.AppField>
-            <form.AppField name="password">
-              {(field) => (
-                <field.AuthTextField
-                  type="password"
-                  placeholder="Password"
-                  icon={<Lock className="stroke-foreground/50" />}
+                  placeholder="Email"
+                  icon={<Mail className="stroke-foreground/50" />}
                 />
               )}
             </form.AppField>
             <form.AppForm>
-              <form.AuthSubscribeBtn label="Login" />
+              <form.AuthSubscribeBtn label="Send Reset Link" />
             </form.AppForm>
           </div>
-          <div className="text-center">
-            <Link
-              className="text-foreground/50 hover:text-foreground"
-              to="/forgot-password"
-            >
-              Forgot Password
-            </Link>
-          </div>
           <div className=" flex items-center gap-2 justify-center">
-            <p className="text-foreground/50">Don't have an account?</p>
+            <p className="text-foreground/50">Back to</p>
             <Link
               className="text-foreground/50 hover:text-foreground"
-              to="/signup"
+              to="/login"
             >
-              Sign Up
+              Login
             </Link>
           </div>
         </form>

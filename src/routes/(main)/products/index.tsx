@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { ChevronRightIcon, Loader2 } from 'lucide-react';
 import { Suspense } from 'react';
 
-export const Route = createFileRoute('/products/')({
+export const Route = createFileRoute('/(main)/products/')({
   component: RouteComponent,
   loaderDeps: ({ search }) => {
     const { name, limit, page } = search as any;

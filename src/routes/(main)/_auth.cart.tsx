@@ -7,7 +7,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronRight, Loader2 } from 'lucide-react'
 
-export const Route = createFileRoute('/_auth/cart')({
+export const Route = createFileRoute('/(main)/_auth/cart')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
     queryClient.ensureQueryData(cartQueryOptions)
