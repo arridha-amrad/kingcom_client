@@ -1,24 +1,24 @@
-import { useVerify } from '@/hooks/auth/useVerify';
-import { useAppForm } from '@/hooks/useAppForm';
-import { setAccessToken } from '@/lib/axiosInterceptor';
-import { emailVerificationSchema } from '@/schemas/auth.schema';
-import { Description, DialogTitle } from '@headlessui/react';
-import { type Dispatch, type SetStateAction } from 'react';
-import toast from 'react-hot-toast';
+import { useVerifyMutation } from '@/hooks/auth.hooks'
+import { useAppForm } from '@/hooks/useAppForm'
+import { setAccessToken } from '@/lib/axiosInterceptor'
+import { emailVerificationSchema } from '@/schemas/auth.schema'
+import { Description, DialogTitle } from '@headlessui/react'
+import { type Dispatch, type SetStateAction } from 'react'
+import toast from 'react-hot-toast'
 
 interface Props {
   registrationResult: {
-    message: string;
-    token: string;
-  };
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+    message: string
+    token: string
+  }
+  setIsOpen: Dispatch<SetStateAction<boolean>>
 }
 
 export default function FormEmailVerification({
   registrationResult: { message, token },
   setIsOpen,
 }: Props) {
-  const { mutateAsync, isPending } = useVerify();
+  const { mutateAsync, isPending } = useVerifyMutation()
   const form = useAppForm({
     defaultValues: {
       code: '',
@@ -27,31 +27,31 @@ export default function FormEmailVerification({
       onChange: emailVerificationSchema,
     },
     async onSubmit({ value: { code } }) {
-      const id = toast.loading('Submitting your data...');
+      const id = toast.loading('Submitting your data...')
       try {
         const data = await mutateAsync({
           code,
           token,
-        });
+        })
         if (data) {
-          setAccessToken(data.token);
+          setAccessToken(data.token)
         }
-        toast.success('Email verification is successful', { id });
-        setIsOpen(false);
+        toast.success('Email verification is successful', { id })
+        setIsOpen(false)
       } catch (err) {
         if (err instanceof Error) {
-          toast.error(err.message, { id });
+          toast.error(err.message, { id })
         }
       }
     },
-  });
+  })
   return (
     <fieldset disabled={isPending}>
       <form
         onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          form.handleSubmit();
+          e.preventDefault()
+          e.stopPropagation()
+          form.handleSubmit()
         }}
         className="space-y-4"
       >
@@ -72,5 +72,5 @@ export default function FormEmailVerification({
         </div>
       </form>
     </fieldset>
-  );
+  )
 }

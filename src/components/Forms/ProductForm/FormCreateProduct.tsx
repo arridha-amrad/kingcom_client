@@ -1,6 +1,6 @@
 import useCreateProduct from '@/hooks/product/useCreateProduct'
 import { useAppForm } from '@/hooks/useAppForm'
-import { createProductSchema } from '@/schemas/product'
+import { createProductSchema } from '@/schemas/product.schema'
 import toast from 'react-hot-toast'
 
 export default function FormAddProduct() {

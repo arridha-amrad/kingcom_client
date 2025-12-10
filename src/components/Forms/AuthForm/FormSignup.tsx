@@ -1,4 +1,4 @@
-import { useSignup } from '@/hooks/auth/useSignup'
+import { useSignupMutation } from '@/hooks/auth.hooks'
 import { useAppForm } from '@/hooks/useAppForm'
 import { signupSchema } from '@/schemas/auth.schema'
 import { type Dispatch, type SetStateAction } from 'react'
@@ -18,7 +18,7 @@ export default function FormSignup({
   setIsLogin,
   setRegistrationResult,
 }: Props) {
-  const { isPending, mutateAsync } = useSignup()
+  const { isPending, mutateAsync } = useSignupMutation()
   const form = useAppForm({
     defaultValues: {
       name: '',

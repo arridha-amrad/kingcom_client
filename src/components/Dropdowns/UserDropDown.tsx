@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   Menu,
@@ -6,7 +6,7 @@ import {
   MenuItem,
   MenuItems,
   MenuSeparator,
-} from '@headlessui/react';
+} from '@headlessui/react'
 import {
   ChevronDown,
   User,
@@ -15,22 +15,22 @@ import {
   LogOut,
   ShieldUser,
   BadgeDollarSign,
-} from 'lucide-react';
-import ModalLogout from '../Modals/ModalLogout';
-import { useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
-import { useGetAuth } from '@/hooks/auth/useGetAuth';
+} from 'lucide-react'
+import ModalLogout from '../Modals/ModalLogout'
+import { useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import { useFetchAuth } from '@/hooks/auth.hooks'
 
 export default function Example() {
-  const { data } = useGetAuth();
-  const [isModalOpen, setModalOpen] = useState(false);
-  const router = useNavigate();
+  const { data } = useFetchAuth()
+  const [isModalOpen, setModalOpen] = useState(false)
+  const router = useNavigate()
 
   const openLogoutModal = () => {
-    setModalOpen(true);
-  };
+    setModalOpen(true)
+  }
 
-  if (!data) return null;
+  if (!data) return null
 
   return (
     <>
@@ -52,9 +52,9 @@ export default function Example() {
               {({ close }) => (
                 <button
                   onClick={(e) => {
-                    e.stopPropagation();
-                    router({ to: '/admin' });
-                    close();
+                    e.stopPropagation()
+                    router({ to: '/admin' })
+                    close()
                   }}
                   className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-foreground/10"
                 >
@@ -75,7 +75,7 @@ export default function Example() {
           <MenuItem>
             <button
               onClick={() => {
-                router({ to: '/orders' });
+                router({ to: '/orders' })
               }}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-foreground/10"
             >
@@ -103,5 +103,5 @@ export default function Example() {
       </Menu>
       <ModalLogout isOpen={isModalOpen} setIsOpen={setModalOpen} />
     </>
-  );
+  )
 }

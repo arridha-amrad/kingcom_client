@@ -1,12 +1,8 @@
-import { useLogin } from '@/hooks/auth/useLogin'
+import { useLoginMutation } from '@/hooks/auth.hooks'
 import { useAppForm } from '@/hooks/useAppForm'
-import { setAccessToken } from '@/lib/axiosInterceptor'
-import { useLoginMutation } from '@/queryOptions/auth.queryOptions'
 import { loginSchema } from '@/schemas/auth.schema'
-import { Description, DialogTitle } from '@headlessui/react'
-import { Link, useRouter, useRouterState } from '@tanstack/react-router'
+import { Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { type Dispatch, type SetStateAction } from 'react'
-import toast from 'react-hot-toast'
 
 interface Props {
   setIsOpen: Dispatch<SetStateAction<boolean>>
@@ -15,6 +11,12 @@ interface Props {
 
 export default function FormLogin({ setIsOpen, setIsLogin }: Props) {
   const { mutateAsync, isPending } = useLoginMutation()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const searchParams = new URLSearchParams(location.search)
+
+  console.log(searchParams.get('redirect'))
+
   const form = useAppForm({
     defaultValues: {
       identity: '',
@@ -24,10 +26,16 @@ export default function FormLogin({ setIsOpen, setIsLogin }: Props) {
       onChange: loginSchema,
     },
     async onSubmit({ value: { identity, password } }) {
-      await mutateAsync({
+      const result = await mutateAsync({
         identity,
         password,
       })
+      const redirect = searchParams.get('redirect')
+      if (result && redirect) {
+        navigate({
+          to: redirect,
+        })
+      }
       setIsOpen(false)
     },
   })
@@ -60,7 +68,11 @@ export default function FormLogin({ setIsOpen, setIsLogin }: Props) {
           </form.AppForm>
         </div>
         <div className="text-center">
-          <Link className="text-foreground/50 hover:text-foreground" to="/">
+          <Link
+            onClick={() => setIsOpen(false)}
+            className="text-foreground/50 hover:text-foreground"
+            to="/forgot-password"
+          >
             Forgot Password
           </Link>
         </div>

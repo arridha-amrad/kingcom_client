@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const signupSchema = z.object({
   name: z.string().min(1, 'identity is required'),
@@ -14,13 +14,19 @@ export const signupSchema = z.object({
       message: 'contain at least one special character.',
     })
     .trim(),
-});
+})
+
+export type SignupParams = z.infer<typeof signupSchema>
 
 export const loginSchema = z.object({
   identity: z.string().min(1, 'Please input your username or email address'),
   password: z.string().min(1, 'password is required'),
-});
+})
+
+export type LoginParams = z.infer<typeof loginSchema>
 
 export const emailVerificationSchema = z.object({
   code: z.string().min(1, 'code is required'),
-});
+})
+
+export type EmailVerificationParams = z.infer<typeof emailVerificationSchema>

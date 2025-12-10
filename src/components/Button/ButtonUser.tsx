@@ -1,11 +1,11 @@
+import { getAuthQueryOptions } from '@/hooks/auth.hooks'
+import { useQuery } from '@tanstack/react-query'
 import UserDropdown from '../Dropdowns/UserDropDown'
 import ModalLoginOrSignup from '../Modals/ModalLoginOrSignup'
 import Spinner from '../Spinner'
-import { useQuery } from '@tanstack/react-query'
-import { meQueryOptions } from '@/queryOptions/auth.queryOptions'
 
 export default function ButtonUser() {
-  const { data, isLoading } = useQuery(meQueryOptions)
+  const { data, isLoading } = useQuery(getAuthQueryOptions())
   if (isLoading) {
     return (
       <button className="fill-foreground">
@@ -13,7 +13,7 @@ export default function ButtonUser() {
       </button>
     )
   }
-  if (!data?.user) {
+  if (!data) {
     return <ModalLoginOrSignup />
   } else {
     return <UserDropdown />
