@@ -24,6 +24,8 @@ export const Route = createFileRoute('/(main)/_auth/cart')({
 function RouteComponent() {
   const { data } = useSuspenseQuery(cartQueryOptions)
 
+  console.log(data)
+
   return (
     <main className="w-full mx-auto px-4">
       <section

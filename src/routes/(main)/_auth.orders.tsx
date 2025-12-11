@@ -10,6 +10,9 @@ export const Route = createFileRoute('/(main)/_auth/orders')({
   loader: async ({ context: { queryClient } }) => {
     queryClient.ensureQueryData(ordersQueryOptions)
   },
+  head: () => ({
+    meta: [{ title: 'Kingcom - Orders' }],
+  }),
   pendingComponent: () => (
     <div className="flex my-4 flex-col items-center justify-center w-full">
       <Loader2 className="animate-spin size-7" />

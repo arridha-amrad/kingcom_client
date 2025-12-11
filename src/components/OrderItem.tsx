@@ -1,6 +1,10 @@
 import { privateAxios } from '@/lib/axiosInterceptor'
 import type { Order } from '@/models/order.model'
-import { formatToIdr, transactionDateFormatter } from '@/utils'
+import {
+  formatToIdr,
+  getAfterDiscountPrice,
+  transactionDateFormatter,
+} from '@/utils'
 import { useNavigate } from '@tanstack/react-router'
 import { Ship, ShoppingBag } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -13,15 +17,15 @@ const payViaMidtrans = async (orderId: string) => {
   let snapToken: string
   try {
     window.snap.show()
-    const res = await privateAxios.get(`/midtrans/${orderId}/token`)
+    const res = await privateAxios.post('/midtrans/token', {
+      orderId,
+    })
     snapToken = res.data.token
-    if (!snapToken) {
-      window.snap.hide()
-      throw new Error('Something went wrong')
-    }
+    console.log({ token: snapToken })
     window.snap.pay(snapToken)
   } catch (err) {
     console.log(err)
+    window.snap.hide()
     toast.error('Failed to get your transaction token. Please try again.')
   }
 }
@@ -78,8 +82,7 @@ export default function OrderItem({ item }: Props) {
                   <div className="font-light text-foreground/70">
                     {i.quantity} x{' '}
                     {formatToIdr(
-                      i.product.price -
-                        (i.product.price * i.product.discount) / 100
+                      getAfterDiscountPrice(i.product.price, i.product.discount)
                     )}
                   </div>
                 ) : (

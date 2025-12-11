@@ -16,6 +16,7 @@ export const Route = createFileRoute('/(main)/')({
       },
     ],
   }),
+  ssr: true,
 })
 
 function RouteComponent() {

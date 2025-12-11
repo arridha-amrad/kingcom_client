@@ -18,11 +18,11 @@ export const useCostMutation = () => {
           cost: number
           etd: string
         }[]
-      }>(`/shipping/cost`, params)
+      }>('/shipping/cost', params)
       return res.data
     },
     onError: (err) => {
-      console.log(err)
+      console.log('cost mutation error : ', err)
       if (err instanceof Error) {
         toast.error(err.message)
       }

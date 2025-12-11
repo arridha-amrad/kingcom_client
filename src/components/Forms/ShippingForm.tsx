@@ -224,22 +224,24 @@ ShippingForm.AvailableCouriers = () => {
       aria-label="Courier"
       className="space-y-2"
     >
-      {availableCouriers.map((ac, i) => (
-        <Radio
-          key={i}
-          value={ac}
-          className="flex items-end justify-between hover:bg-foreground/5 transition-colors ease-in duration-100 px-4 py-2 rounded-lg cursor-pointer data-checked:bg-white/10"
-        >
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold">{ac.name}</span>
-            <span className="text-sm">{ac.service}</span>
-          </div>
-          <div className="flex flex-col items-end">
-            <span className="text-sm italic font-bold">{ac.etd}</span>
-            <span className="text-sm">{formatToIdr(ac.cost)}</span>
-          </div>
-        </Radio>
-      ))}
+      {availableCouriers
+        .filter((ac) => ac.etd !== '' && ac.etd !== '-' && ac.cost > 0)
+        .map((ac, i) => (
+          <Radio
+            key={i}
+            value={ac}
+            className="flex items-end justify-between hover:bg-foreground/5 transition-colors ease-in duration-100 px-4 py-2 rounded-lg cursor-pointer data-checked:bg-white/10"
+          >
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold">{ac.name}</span>
+              <span className="text-sm">{ac.service}</span>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-sm italic font-bold">{ac.etd}</span>
+              <span className="text-sm">{formatToIdr(ac.cost)}</span>
+            </div>
+          </Radio>
+        ))}
     </RadioGroup>
   )
 }

@@ -1,12 +1,13 @@
-import type { Cart } from '@/models/cart.model'
-import { formatToIdr } from '@/utils'
-import { CheckIcon, Trash } from 'lucide-react'
-import { createContext, useContext, useState, type ReactNode } from 'react'
-import ButtonQuantity from './Button/ButtonQuantity'
-import { useQueryClient } from '@tanstack/react-query'
 import { cacheKey } from '@/constants/cacheKey'
-import { Checkbox } from '@headlessui/react'
 import { useRemoveCartItemMutation } from '@/hooks/cart.hooks'
+import type { Cart } from '@/models/cart.model'
+import { cartKeys } from '@/queryOptions/cart.queryOptions'
+import { formatToIdr, getAfterDiscountPrice, getFinalPrice } from '@/utils'
+import { Checkbox } from '@headlessui/react'
+import { useQueryClient } from '@tanstack/react-query'
+import { CheckIcon, Trash } from 'lucide-react'
+import { createContext, useContext, type ReactNode } from 'react'
+import ButtonQuantity from './Button/ButtonQuantity'
 
 const CartCardContext = createContext<{ cart: Cart } | null>(null)
 
@@ -82,10 +83,11 @@ CartCard.Price = () => {
       product: { price, discount },
     },
   } = useCartCardContext()
+  const finalPrice = getAfterDiscountPrice(price, discount)
   return (
     <div className="flex gap-2 text-foreground/50">
       <p>Price : </p>
-      <p className="">{formatToIdr(price - (discount * price) / 100)}</p>
+      <p className="">{formatToIdr(finalPrice)}</p>
       <p className="line-through">{formatToIdr(price)}</p>
     </div>
   )
@@ -125,9 +127,7 @@ CartCard.Total = () => {
   } = useCartCardContext()
   return (
     <h2 className="font-bold text-2xl">
-      {formatToIdr(
-        Math.ceil((price - (price * discount) / 100) * quantity * 10) / 10
-      )}
+      {formatToIdr(getFinalPrice(price, discount, quantity))}
     </h2>
   )
 }
@@ -168,12 +168,30 @@ CartCard.Quantity = () => {
 }
 
 CartCard.Checkbox = () => {
-  const [enabled, setEnabled] = useState(true)
+  const { cart } = useCartCardContext()
+  const qc = useQueryClient()
+
+  const toggle = () => {
+    qc.setQueryData([cartKeys.fetchCart], ({ carts }: { carts: Cart[] }) => {
+      const updatedCarts = carts.map((c) => {
+        if (c.id === cart.id) {
+          return {
+            ...c,
+            isChecked: !c.isChecked,
+          }
+        }
+        return c
+      })
+      return {
+        carts: updatedCarts,
+      }
+    })
+  }
 
   return (
     <Checkbox
-      checked={enabled}
-      onChange={setEnabled}
+      checked={cart.isChecked}
+      onChange={toggle}
       className="group size-6 rounded-md bg-foreground/10 p-1 ring-1 ring-background/15 ring-inset focus:not-data-focus:outline-none data-focus:outline data-focus:outline-offset-2"
     >
       <CheckIcon className="hidden fill-background size-4 group-data-checked:block" />

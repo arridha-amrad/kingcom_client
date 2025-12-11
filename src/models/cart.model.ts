@@ -1,9 +1,10 @@
-import type { Product } from './product.model';
+import type { Product } from './product.model'
 
 export type Cart = {
-  id: string;
-  quantity: number;
-  createdAt: Date;
-  updatedAt: Date;
-  product: Product;
-};
+  id: string
+  quantity: number
+  isChecked: boolean
+  createdAt: Date
+  updatedAt: Date
+  product: Product
+}

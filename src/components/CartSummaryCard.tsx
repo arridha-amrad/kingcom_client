@@ -3,7 +3,7 @@ import { cacheKey } from '@/constants/cacheKey'
 import type { Cart } from '@/models/cart.model'
 import type { Shipping } from '@/models/order.model'
 import { usePlaceOrderMutation } from '@/queryOptions/order.queryOptions'
-import { formatToIdr } from '@/utils'
+import { formatToIdr, getAfterDiscountPrice, getFinalPrice } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowRightIcon, Tag, Truck } from 'lucide-react'
 import {
@@ -17,14 +17,12 @@ import toast from 'react-hot-toast'
 import Spinner from './Spinner'
 
 const calcCartSubtotal = (carts: Cart[]) => {
-  const subTotal = carts.reduce((pv, cv) => {
-    const price = cv.product.price
-    const discount = cv.product.discount
-    const priceAfterDiscount = Math.ceil(price - (price * discount) / 100)
-    const total = cv.quantity * priceAfterDiscount
-    pv += total
-    return pv
-  }, 0)
+  const subTotal = carts
+    .filter((c) => c.isChecked)
+    .reduce((pv, cv) => {
+      pv += getFinalPrice(cv.product.price, cv.product.discount, cv.quantity)
+      return pv
+    }, 0)
   return subTotal
 }
 
@@ -156,13 +154,21 @@ CartSummaryCard.PlaceOrderButton = () => {
       toast.error('courier is empty')
       return
     }
-    const items: PlaceOrderItem[] = carts.map((c) => ({
-      cartId: c.id,
-      productId: c.product.id,
-      quantity: c.quantity,
-    }))
     await mutateAsync({
-      items,
+      items: carts
+        .filter((c) => c.isChecked)
+        .map((c) => ({
+          cartId: c.id,
+          productId: c.product.id,
+          quantity: c.quantity,
+          priceAtOrder: c.product.price,
+          discountAtOrder: c.product.discount,
+          finalPriceAtOrder: getFinalPrice(
+            c.product.price,
+            c.product.discount,
+            c.quantity
+          ),
+        })),
       shipping: courier,
       total,
     })

@@ -24,3 +24,17 @@ export const transactionDateFormatter = (date: Date) => {
   }).format(date)
   return formattedDate
 }
+
+export const getAfterDiscountPrice = (price: number, discount: number) => {
+  const priceAfterDiscount = Math.ceil(price - (price * discount) / 100)
+  return priceAfterDiscount
+}
+
+export const getFinalPrice = (
+  price: number,
+  discount: number,
+  quantity: number
+) => {
+  const priceAfterDiscount = getAfterDiscountPrice(price, discount)
+  return priceAfterDiscount * quantity
+}
